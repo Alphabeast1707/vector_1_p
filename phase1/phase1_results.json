@@ -1,0 +1,53 @@
+{
+  "timestamp": "2026-06-26T20:30:13.473922",
+  "api_name": "Paracetamol",
+  "n_experiments": 8,
+  "n_pareto": 3,
+  "gp_r2": 0.9999510795173641,
+  "pareto_cpp": [
+    {
+      "PEG 4000_pct": 31.340030290942973,
+      "Croscarmellose_pct": 1.6662913888609783,
+      "Magnesium_Stearate_pct": 0.9996106170794928,
+      "Granulation_Moisture_%": 3.475225339741611,
+      "Drying_Temperature_C": 52.148240386069865,
+      "Compression_Force_kN": 9.358692961001935
+    },
+    {
+      "PEG 4000_pct": 42.006707579014815,
+      "Croscarmellose_pct": 2.8571331820780594,
+      "Magnesium_Stearate_pct": 1.5038942203543912,
+      "Granulation_Moisture_%": 4.600139028284745,
+      "Drying_Temperature_C": 88.0032621784164,
+      "Compression_Force_kN": 18.835378179129442
+    },
+    {
+      "PEG 4000_pct": 39.717435183726515,
+      "Croscarmellose_pct": 3.0271062708820318,
+      "Magnesium_Stearate_pct": 1.5697458039238457,
+      "Granulation_Moisture_%": 4.229159859705146,
+      "Drying_Temperature_C": 92.12103591330654,
+      "Compression_Force_kN": 17.165741703479327
+    }
+  ],
+  "pareto_cqa": [
+    {
+      "Hardness_N": 102.48357076505616,
+      "Dissolution_30min_%": 79.06338650110666,
+      "Friability_%": 0.4882631403516262,
+      "Uniformity_RSD_%": 2.0241962271566036
+    },
+    {
+      "Hardness_N": 99.30867849414408,
+      "Dissolution_30min_%": 79.06345217220328,
+      "Friability_%": 0.5135640010896492,
+      "Uniformity_RSD_%": 1.8086719755342202
+    },
+    {
+      "Hardness_N": 102.48357076505616,
+      "Dissolution_30min_%": 79.44694279531527,
+      "Friability_%": 0.5161922134525173,
+      "Uniformity_RSD_%": 2.1523029856408025
+    }
+  ]
+}
