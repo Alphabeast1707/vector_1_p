@@ -44,3 +44,62 @@ def suggest_next_experiment(session_id: str = "default"):
     loop = active_loops[session_id]
     suggestion = loop.suggest_next()
     return {"suggestion": suggestion}
+
+@router.get("/history")
+def get_experiment_history(session_id: str = "default"):
+    """
+    Returns all experiments with CPP inputs and CQA outputs.
+    """
+    if session_id not in active_loops:
+        raise HTTPException(status_code=400, detail="Session not found")
+    loop = active_loops[session_id]
+    return {
+        "n_experiments": len(loop.history_X),
+        "experiments": [
+            {"x": x, "y": y}
+            for x, y in zip(loop.history_X, loop.history_Y)
+        ]
+    }
+
+@router.get("/pareto")
+def get_pareto_front(session_id: str = "default"):
+    """
+    Returns current Pareto-optimal solutions with CQA predictions.
+    """
+    if session_id not in active_loops:
+        raise HTTPException(status_code=400, detail="Session not found")
+    loop = active_loops[session_id]
+    return {
+        "n_pareto": len(loop.pareto_solutions),
+        "pareto_solutions": loop.pareto_solutions,
+        "hypervolume_history": loop.hypervolume_history
+    }
+
+@router.get("/convergence")
+def check_convergence_status(session_id: str = "default"):
+    """
+    Checks whether the optimization loop has converged.
+    """
+    if session_id not in active_loops:
+        raise HTTPException(status_code=400, detail="Session not found")
+    loop = active_loops[session_id]
+    return loop.check_convergence()
+
+@router.get("/summary")
+def get_session_summary(session_id: str = "default"):
+    """
+    Returns complete Phase 1 summary for export to Team Delta.
+    """
+    if session_id not in active_loops:
+        raise HTTPException(status_code=400, detail="Session not found")
+    loop = active_loops[session_id]
+    convergence = loop.check_convergence()
+    return {
+        "schema_version": "1.0",
+        "api_name": loop.domain.api_name if hasattr(loop.domain, 'api_name') else "unknown",
+        "n_seed_experiments": loop.seed_count,
+        "n_total_experiments": len(loop.history_X),
+        "n_pareto_solutions": len(loop.pareto_solutions),
+        "loo_cv_r2": loop.compute_loo_cv_r2(),
+        "converged": convergence["converged"]
+    }
