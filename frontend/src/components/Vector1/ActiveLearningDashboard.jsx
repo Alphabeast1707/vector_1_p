@@ -12,7 +12,7 @@ export default function ActiveLearningDashboard() {
   const [bestParams, setBestParams] = useState(null);
   const [error, setError] = useState(null);
 
-  // List of active suggested runs: each { id, params: {...}, results: {dissolution, hardness, friability}, submitted: false }
+  // List of active suggested runs: each { id, params: {...}, results: { diss_q15, diss_q30, diss_q45, diss_q60, hardness_n, friability, cu, heckel }, submitted: false }
   const [suggestedRuns, setSuggestedRuns] = useState([]);
 
   // User input states (constraints)
@@ -63,7 +63,7 @@ export default function ActiveLearningDashboard() {
       const initialRuns = initData.initial_suggestions.map((suggestion, idx) => ({
         id: idx + 1,
         params: suggestion,
-        results: { dissolution: '', hardness: '', friability: '' },
+        results: { diss_q15: '', diss_q30: '', diss_q45: '', diss_q60: '', hardness_n: '', friability: '', cu: '', heckel: '' },
         submitted: false
       }));
 
@@ -93,9 +93,12 @@ export default function ActiveLearningDashboard() {
     const run = suggestedRuns.find(r => r.id === runId);
     if (!run) return;
 
-    const { dissolution, hardness, friability } = run.results;
-    if (dissolution === '' || hardness === '' || friability === '') {
-      setError("Please input the laboratory Dissolution %, Hardness kP, and Friability % before submitting.");
+    const { diss_q15, diss_q30, diss_q45, diss_q60, hardness_n, friability, cu, heckel } = run.results;
+    if (
+      diss_q15 === '' || diss_q30 === '' || diss_q45 === '' || diss_q60 === '' || 
+      hardness_n === '' || friability === '' || cu === '' || heckel === ''
+    ) {
+      setError("Please input all 8 Critical Quality Attributes (Q15, Q30, Q45, Q60, Hardness, Friability, CU, Heckel) before submitting.");
       return;
     }
 
@@ -106,9 +109,14 @@ export default function ActiveLearningDashboard() {
         body: JSON.stringify({
           x_params: run.params,
           y_results: {
-            dissolution_q30: parseFloat(dissolution),
-            hardness_kp: parseFloat(hardness),
-            friability_pct: parseFloat(friability)
+            dissolution_q15: parseFloat(diss_q15),
+            dissolution_q30: parseFloat(diss_q30),
+            dissolution_q45: parseFloat(diss_q45),
+            dissolution_q60: parseFloat(diss_q60),
+            hardness_n: parseFloat(hardness_n),
+            friability_pct: parseFloat(friability),
+            content_uniformity_pct: parseFloat(cu),
+            compressibility_heckel_slope: parseFloat(heckel)
           }
         })
       });
@@ -116,9 +124,9 @@ export default function ActiveLearningDashboard() {
 
       setSuggestedRuns(prev => prev.map(r => r.id === runId ? { ...r, submitted: true } : r));
 
-      const dissVal = parseFloat(dissolution);
-      const hardVal = parseFloat(hardness);
-      const desirability = Math.min(100, Math.round((dissVal / parseFloat(targetDiss)) * 50 + (hardVal / parseFloat(targetHardness)) * 30));
+      const dissVal = parseFloat(diss_q30);
+      const hardVal = parseFloat(hardness_n);
+      const desirability = Math.min(100, Math.round((dissVal / parseFloat(targetDiss)) * 50 + (hardVal / 100.0) * 30));
 
       setParetoData(prev => [
         ...prev,
@@ -150,7 +158,7 @@ export default function ActiveLearningDashboard() {
       const newRun = {
         id: nextId,
         params: nextSuggestion,
-        results: { dissolution: '', hardness: '', friability: '' },
+        results: { diss_q15: '', diss_q30: '', diss_q45: '', diss_q60: '', hardness_n: '', friability: '', cu: '', heckel: '' },
         submitted: false
       };
 
@@ -197,54 +205,61 @@ export default function ActiveLearningDashboard() {
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <div>
-            <label className="block text-sm text-slate-400 mb-1">API Name</label>
+            <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">API Identity</label>
             <input 
               type="text" 
               value={apiName} 
               onChange={(e) => setApiName(e.target.value)} 
               disabled={sessionInitialized}
               className="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-emerald-500"
+              placeholder="API Reference"
             />
           </div>
           <div>
-            <label className="block text-sm text-slate-400 mb-1">Glass Transition Temp (Tg)</label>
-            <div className="flex items-center space-x-2 mt-2">
+            <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Thermal Limits (°C)</label>
+            <div className="flex space-x-2">
               <input 
-                type="range" 
-                min="-50" 
-                max="150" 
+                type="number" 
                 value={tg} 
-                onChange={(e) => setTg(parseFloat(e.target.value))}
+                onChange={(e) => setTg(parseFloat(e.target.value))} 
                 disabled={sessionInitialized}
-                className="w-full accent-emerald-500"
+                className="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-emerald-500"
+                placeholder="Tg"
               />
-              <span className="font-mono text-sm min-w-[50px]">{tg}°C</span>
+              <input 
+                type="number" 
+                value={decomp} 
+                onChange={(e) => setDecomp(parseFloat(e.target.value))} 
+                disabled={sessionInitialized}
+                className="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-emerald-500"
+                placeholder="Decomp"
+              />
             </div>
           </div>
           <div>
-            <label className="block text-sm text-slate-400 mb-1">MCC Concentration Bounds</label>
-            <div className="flex items-center space-x-2 mt-1">
+            <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">MCC Concentration Limits (%)</label>
+            <div className="flex space-x-2">
               <input 
                 type="number" 
                 value={mccMin} 
                 onChange={(e) => setMccMin(parseFloat(e.target.value))} 
                 disabled={sessionInitialized}
-                className="w-20 bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-emerald-500"
+                className="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-emerald-500"
+                placeholder="Min %"
               />
-              <span className="text-slate-500">-</span>
               <input 
                 type="number" 
                 value={mccMax} 
                 onChange={(e) => setMccMax(parseFloat(e.target.value))} 
                 disabled={sessionInitialized}
-                className="w-20 bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-emerald-500"
+                className="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-emerald-500"
+                placeholder="Max %"
               />
-              <span className="text-xs text-slate-400">%</span>
             </div>
           </div>
           <div>
-            <label className="block text-sm text-slate-400 mb-1">CQA Targets (Min Dissolution & Hardness)</label>
-            <div className="flex items-center space-x-2 mt-1">
+            <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Target Objectives</label>
+            <div className="flex space-x-2 items-center">
               <input 
                 type="number" 
                 value={targetDiss} 
@@ -283,9 +298,9 @@ export default function ActiveLearningDashboard() {
               <table className="w-full text-left border-collapse text-sm">
                 <thead>
                   <tr className="border-b border-slate-700 text-slate-400 font-semibold">
-                    <th className="py-3 px-4">Run #</th>
-                    <th className="py-3 px-4">Formulation & Process Parameters (Suggest by GP)</th>
-                    <th className="py-3 px-4">Enter Lab Outcomes (CQAs)</th>
+                    <th className="py-3 px-4 w-12">Run #</th>
+                    <th className="py-3 px-4 w-1/3">Formulation & Process Parameters (Suggest by GP)</th>
+                    <th className="py-3 px-4 w-1/2">Enter Lab Outcomes (8 CQAs)</th>
                     <th className="py-3 px-4">Actions</th>
                   </tr>
                 </thead>
@@ -303,34 +318,98 @@ export default function ActiveLearningDashboard() {
                       </td>
                       <td className="py-4 px-4">
                         {run.submitted ? (
-                          <div className="inline-flex space-x-4 text-xs bg-slate-900/60 p-2 rounded border border-emerald-950/60 text-emerald-300 font-mono">
-                            <span>Dissolution: {run.results.dissolution}%</span>
-                            <span>Hardness: {run.results.hardness} kP</span>
+                          <div className="grid grid-cols-4 gap-2 text-[10px] bg-slate-900/60 p-2 rounded border border-emerald-950/60 text-emerald-300 font-mono">
+                            <span>Q15: {run.results.diss_q15}%</span>
+                            <span>Q30: {run.results.diss_q30}%</span>
+                            <span>Q45: {run.results.diss_q45}%</span>
+                            <span>Q60: {run.results.diss_q60}%</span>
+                            <span>Hardness: {run.results.hardness_n} N</span>
                             <span>Friability: {run.results.friability}%</span>
+                            <span>CU: {run.results.cu}%</span>
+                            <span>Heckel: {run.results.heckel}</span>
                           </div>
                         ) : (
-                          <div className="flex items-center space-x-2">
-                            <input 
-                              type="number"
-                              placeholder="Dissolution %"
-                              value={run.results.dissolution}
-                              onChange={(e) => handleResultChange(run.id, 'dissolution', e.target.value)}
-                              className="w-24 bg-slate-900 border border-slate-700 rounded p-1 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono"
-                            />
-                            <input 
-                              type="number"
-                              placeholder="Hardness kP"
-                              value={run.results.hardness}
-                              onChange={(e) => handleResultChange(run.id, 'hardness', e.target.value)}
-                              className="w-24 bg-slate-900 border border-slate-700 rounded p-1 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono"
-                            />
-                            <input 
-                              type="number"
-                              placeholder="Friability %"
-                              value={run.results.friability}
-                              onChange={(e) => handleResultChange(run.id, 'friability', e.target.value)}
-                              className="w-24 bg-slate-900 border border-slate-700 rounded p-1 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono"
-                            />
+                          <div className="grid grid-cols-4 gap-2">
+                            <div>
+                              <span className="text-[10px] text-slate-500 block">Q15 %</span>
+                              <input 
+                                type="number"
+                                placeholder="Q15"
+                                value={run.results.diss_q15}
+                                onChange={(e) => handleResultChange(run.id, 'diss_q15', e.target.value)}
+                                className="w-full bg-slate-900 border border-slate-700 rounded p-1 text-[10px] text-white focus:outline-none focus:border-emerald-500 font-mono"
+                              />
+                            </div>
+                            <div>
+                              <span className="text-[10px] text-slate-500 block">Q30 %</span>
+                              <input 
+                                type="number"
+                                placeholder="Q30"
+                                value={run.results.diss_q30}
+                                onChange={(e) => handleResultChange(run.id, 'diss_q30', e.target.value)}
+                                className="w-full bg-slate-900 border border-slate-700 rounded p-1 text-[10px] text-white focus:outline-none focus:border-emerald-500 font-mono"
+                              />
+                            </div>
+                            <div>
+                              <span className="text-[10px] text-slate-500 block">Q45 %</span>
+                              <input 
+                                type="number"
+                                placeholder="Q45"
+                                value={run.results.diss_q45}
+                                onChange={(e) => handleResultChange(run.id, 'diss_q45', e.target.value)}
+                                className="w-full bg-slate-900 border border-slate-700 rounded p-1 text-[10px] text-white focus:outline-none focus:border-emerald-500 font-mono"
+                              />
+                            </div>
+                            <div>
+                              <span className="text-[10px] text-slate-500 block">Q60 %</span>
+                              <input 
+                                type="number"
+                                placeholder="Q60"
+                                value={run.results.diss_q60}
+                                onChange={(e) => handleResultChange(run.id, 'diss_q60', e.target.value)}
+                                className="w-full bg-slate-900 border border-slate-700 rounded p-1 text-[10px] text-white focus:outline-none focus:border-emerald-500 font-mono"
+                              />
+                            </div>
+                            <div>
+                              <span className="text-[10px] text-slate-500 block">Hardness (N)</span>
+                              <input 
+                                type="number"
+                                placeholder="N"
+                                value={run.results.hardness_n}
+                                onChange={(e) => handleResultChange(run.id, 'hardness_n', e.target.value)}
+                                className="w-full bg-slate-900 border border-slate-700 rounded p-1 text-[10px] text-white focus:outline-none focus:border-emerald-500 font-mono"
+                              />
+                            </div>
+                            <div>
+                              <span className="text-[10px] text-slate-500 block">Friability %</span>
+                              <input 
+                                type="number"
+                                placeholder="Fri"
+                                value={run.results.friability}
+                                onChange={(e) => handleResultChange(run.id, 'friability', e.target.value)}
+                                className="w-full bg-slate-900 border border-slate-700 rounded p-1 text-[10px] text-white focus:outline-none focus:border-emerald-500 font-mono"
+                              />
+                            </div>
+                            <div>
+                              <span className="text-[10px] text-slate-500 block">CU %</span>
+                              <input 
+                                type="number"
+                                placeholder="CU"
+                                value={run.results.cu}
+                                onChange={(e) => handleResultChange(run.id, 'cu', e.target.value)}
+                                className="w-full bg-slate-900 border border-slate-700 rounded p-1 text-[10px] text-white focus:outline-none focus:border-emerald-500 font-mono"
+                              />
+                            </div>
+                            <div>
+                              <span className="text-[10px] text-slate-500 block">Heckel</span>
+                              <input 
+                                type="number"
+                                placeholder="Heckel"
+                                value={run.results.heckel}
+                                onChange={(e) => handleResultChange(run.id, 'heckel', e.target.value)}
+                                className="w-full bg-slate-900 border border-slate-700 rounded p-1 text-[10px] text-white focus:outline-none focus:border-emerald-500 font-mono"
+                              />
+                            </div>
                           </div>
                         )}
                       </td>
@@ -340,9 +419,9 @@ export default function ActiveLearningDashboard() {
                         ) : (
                           <button
                             onClick={() => submitRunResults(run.id)}
-                            className="bg-emerald-500 hover:bg-emerald-400 text-slate-900 text-xs px-3.5 py-1.5 rounded font-bold transition-all"
+                            className="bg-emerald-500 hover:bg-emerald-400 text-slate-900 text-xs px-3.5 py-1.5 rounded font-bold transition-all w-full text-center"
                           >
-                            Submit Outcome
+                            Submit
                           </button>
                         )}
                       </td>
