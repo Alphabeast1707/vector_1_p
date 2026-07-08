@@ -54,6 +54,29 @@ Welcome to the **EnFormis Vector 1 (Module 3)** codebase. This repository contai
 
 ---
 
+## 📊 Phase 1 Parameter Mapping (100 Unique Parameters)
+
+Following the formal specification **"Parameters used in phase 1 (Team Gamma)"**, this active learning loop is structurally designed to consume **100 unique physical, solid-state, biopharm, excipient, and process parameters** across 5 distinct execution steps:
+
+### 🔬 1. Parameter Sources
+*   **71 API physicochemical, solid-state, and stability parameters** (from Team Alpha's Dataset of 1,000 APIs). Out of 90 columns, 19 are metadata/provenance tags, leaving 71 genuine characterization parameters (e.g. molecular weight, logP, logD, pKa, ionization fractions, intrinsic solubility, decomposition onset, Carr's index, polymorphism risk, amorphous propensity, hygroscopicity, etc.).
+*   **25 Excipient characterization parameters** (from Team Beta's Dataset of 400 records). Includes thermodynamics (Hansen Solubility parameters, chi parameter), compatibility scores, polymer attributes, moisture/polymorphic risk, concentrations, and selection weights.
+*   **4 Nested Process/CPP parameters** (from Team Beta, inside `process_parameters`). These represent the key candidate **Critical Process Parameters (CPPs)**:
+    1.  `granulation_liquid_pct` (Liquid %)
+    2.  `impeller_speed_rpm` (Impeller Speed)
+    3.  `granulation_time_min` (Granulation Time)
+    4.  `drying_temp_c` (Drying Temperature)
+
+### 🗺️ 2. Parameter Routing Across the 5 Steps
+*   **Step 1 (Input Specs)**: Consumes **~96 parameters** (all API & excipient characterization fields) to establish compatibility.
+*   **Step 1.2 (CPP Bounds)**: Consumes **~13 parameters** (Tg, Melting Point, Decomp Onset, etc.) to set dynamic bounds.
+*   **Step 2 (Seed Design)**: Uses the **4 nested process parameters** as design variables.
+*   **Step 3 (GP Surrogate)**: Uses the **71 API parameters** as fixed covariates (context, not X-matrix variables).
+*   **Step 4 (EHVI)**: Uses **4 direct parameters** (SHAP, compatibility score, desirability weight, alternatives) + risk context.
+*   **Step 5 (Iteration/Convergence)**: Uses **~9 risk parameters** to feed the Risk/Uncertainty Map.
+
+---
+
 ## 📊 Output Data & Datasets
 
 This repository preserves all primary physical formulation output data and historical raw development datasets:
