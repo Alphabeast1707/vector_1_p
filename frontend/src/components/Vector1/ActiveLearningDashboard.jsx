@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { CheckCircle, AlertTriangle, Cpu } from 'lucide-react';
 
+const BACKEND_BASE = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_BACKEND_URL) || "http://localhost:8001";
+
 export default function ActiveLearningDashboard() {
   const [initializing, setInitializing] = useState(false);
   const [running, setRunning] = useState(false);
@@ -50,7 +52,7 @@ export default function ActiveLearningDashboard() {
     };
 
     try {
-      const initRes = await fetch("http://localhost:8001/v1/domain", {
+      const initRes = await fetch(`${BACKEND_BASE}/v1/domain`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ profile, strategy })
@@ -98,7 +100,7 @@ export default function ActiveLearningDashboard() {
     }
 
     try {
-      const submitRes = await fetch("http://localhost:8001/v1/experiments/result", {
+      const submitRes = await fetch(`${BACKEND_BASE}/v1/experiments/result`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -136,7 +138,7 @@ export default function ActiveLearningDashboard() {
     setRunning(true);
     setError(null);
     try {
-      const suggestRes = await fetch("http://localhost:8001/v1/suggest", {
+      const suggestRes = await fetch(`${BACKEND_BASE}/v1/suggest`, {
         method: "POST",
         headers: { "Content-Type": "application/json" }
       });
