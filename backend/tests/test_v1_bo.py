@@ -26,14 +26,14 @@ def test_domain_builder_thermal_constraints():
     
     domain = build_domain(profile, strategy)
     
-    # Verify drying temp is constrained to Tg - 10
+    # Verify drying temp is constrained dynamically based on decomposition temp
     drying_temp_input = next(i for i in domain.inputs if i.key == "drying_temp_c")
-    assert drying_temp_input.bounds == (40.0, 55.0) # 65.0 - 10
+    assert drying_temp_input.bounds == (55.0, 100.0)
     
     # Verify excipient dynamically added
     mcc_input = next(i for i in domain.inputs if i.key == "MCC_pct")
     assert mcc_input.bounds == (20.0, 50.0)
     
-    assert len(domain.inputs) == 7 # 5 process + 2 excipients
+    assert len(domain.inputs) == 11 # 5 process + 4 production + 2 excipients
     assert len(domain.outputs) == 8 # 8 CQAs
 

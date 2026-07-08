@@ -8,10 +8,9 @@ from engines.bo_loop import ActiveLearningLoop
 
 def test_phase1_data_integration():
     # 1. Load the phase1_output.json data
-    test_dir = os.path.dirname(os.path.abspath(__file__))
-    json_path = os.path.abspath(os.path.join(test_dir, '..', '..', 'phase1', 'phase1_output.json'))
+    json_path = "/tmp/phase1_output.json"
     if not os.path.exists(json_path):
-        json_path = "/home/harshit/vector_1/phase1/phase1_output.json"
+        json_path = "/home/harshit/gamma_unofficial-vector1-vector_1/phase1/phase1_output.json"
     assert os.path.exists(json_path), f"File not found: {json_path}"
     
     with open(json_path, "r") as f:
