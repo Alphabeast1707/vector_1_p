@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import v1_bayesian_doe
+from routers import v1_bayesian_doe, v2_scaleup, v3_risk
 
 app = FastAPI(
     title="EnFormis Module 3 API",
@@ -22,3 +22,5 @@ async def health_check():
     return {"status": "ok", "message": "EnFormis Module 3 Backend is running"}
 
 app.include_router(v1_bayesian_doe.router)
+app.include_router(v2_scaleup.router)
+app.include_router(v3_risk.router)
