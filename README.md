@@ -1,163 +1,160 @@
-# EnFormis Vector 1 - Bayesian Active Learning Engine
+# EnFormis Manufacturing Intelligence Core — Module 3 (Team Gamma)
 
-Welcome to the **EnFormis Vector 1 (Module 3)** codebase. This repository contains the high-performance manufacturing intelligence engine for active design of experiments (DoE) and process optimization, using advanced Bayesian optimization via BoTorch/PyTorch with a dynamic React-based Active Learning Dashboard.
+Welcome to the **EnFormis Module 3 (Team Gamma)** production codebase. This repository contains high-performance manufacturing intelligence engines, mechanistic modeling platforms, and machine learning correctors for advanced active design of experiments (DoE) and process scale-up.
 
----
-
-## 📌 Core Features
-
-- **Bayesian Active Learning Core**: Implements a robust multi-objective Bayesian optimization active loop utilizing Gaussian Processes (GP) with Matérn kernels.
-- **Advanced Acquisition Functions**: Uses `qLogNoisyExpectedHypervolumeImprovement` (qLogNEHVI) for reliable hypervolume improvement suggestion even in noisy physical formulation spaces.
-- **Physical & Formulation Constraints**: Full support for mass-balance formulation constraints (e.g. excipients sum <= 70%), physical boundary limits, and thermal/glass transition parameters.
-- **High-Dimensional Scaling Optimization**: Includes intelligent historical baseline point pruning (down to $N \le 4$) in 8D spaces to prevent CPU hypervolume partitioning from running into exponential box-decomposition bottlenecks and freezing.
-- **FastAPI Backend Core**: Highly-scalable async backend endpoints for initializing domains, adding lab experimental results, and generating optimal suggestions.
-- **Interactive React Dashboard**: Live visualization dashboard allowing scientists to configure limits, visualize optimization progress, submit manual lab results, and receive BoTorch suggestions.
+This repository features a **Multi-Vector Architecture** accessible through a unified dashboard interface:
+- 🔬 **Vector 1 (Active Learning)**: Multi-objective Bayesian active experimentation engine using Gaussian Processes (GP) and `qLogNEHVI` acquisition routines.
+- ⚙️ **Vector 2 (Scale-Up)**: Digital Twin physical simulator using Froude and Tip Speed dimensionless scaling coupled with a pre-trained ML residual corrector layer.
+- 🛡️ **Vector 3 (Risk Audit)**: GMP compliance failure mode evaluator generating immutable `ProcessDevelopmentCard` files (Delta/Epsilon handoff).
 
 ---
 
 ## 📁 Repository Structure
 
 ```text
-├── .gitignore                      # Workspace ignores (environments, cash, OS files)
+├── .gitignore                      # Workspace ignores (environments, cache, OS files)
+├── README.md                       # Comprehensive system documentation
 ├── backend/
-│   ├── .gitignore                  # Virtual environment ignores
-│   ├── main.py                     # FastAPI application setup and CORS configuration
+│   ├── .gitignore                  # Virtual environment and local package ignores
+│   ├── main.py                     # Entry point for the FastAPI server & CORS middleware
 │   ├── requirements.txt            # Python dependencies (botorch, fastapi, uvicorn, etc.)
 │   ├── engines/
-│   │   ├── domain_builder.py       # Domain construction from profile and strategy cards
-│   │   ├── gp_model.py            # Gaussian Process model setup
-│   │   ├── acquisition.py         # qLogNEHVI acquisition function with pruning logic
-│   │   └── bo_loop.py             # Active learning state loop (LHS seed -> GP fit -> Optimize)
+│   │   ├── data_ingestion.py       # Reads and cross-validates Team Alpha and Team Beta datasets
+│   │   ├── domain_builder.py       # Dynamically constructs physics-informed design spaces from API data
+│   │   ├── gp_model.py             # SingleTaskGP initialization with Matérn 5/2 covariance kernels
+│   │   ├── acquisition.py          # Log-Noisy Expected Hypervolume Improvement (qLogNEHVI) logic
+│   │   ├── bo_loop.py              # Active loop state engine (LHS seed generator -> GP Fit -> Suggest)
+│   │   ├── equipment_db.py         # Static physical parameters for lab & industrial granulators
+│   │   ├── scaling_laws.py         # Dimensonless Froude, Tip Speed, and Reynolds calculations
+│   │   ├── hybrid_twin.py          # Dimensonless mechanistic scale-up coupled with ML corrector prediction
+│   │   ├── residual_corrector.py   # Machine learning correction model loading and inference
+│   │   ├── risk_map.py             # Active Loop convergence risk and zoning engine
+│   │   └── design_space.py         # Locked operating ranges reconciled with stress thresholds
 │   ├── routers/
-│   │   └── v1_bayesian_doe.py     # FastAPI HTTP route handlers (/domain, /experiments/result, /suggest)
-│   ├── schemas/
-│   │   └── shared_db_schemas.py   # Pydantic schemas (ProfileCard, StrategyCard, etc.)
-│   └── tests/                      # Python pytest validation suites
+│   │   ├── v1_bayesian_doe.py      # Active Learning endpoints (/domain, /experiments/result, /suggest, /summary)
+│   │   ├── v2_scaleup.py           # Scale-Up Digital Twin simulator endpoints (/scaleup)
+│   │   └── v3_risk.py              # Risk audit and GMP failure mode evaluator
+│   ├── models/
+│   │   └── v2_residual_corrector.pkl # Pre-trained ML corrector Random Forest estimator
+│   └── tests/                      # Pytest validation suites
 │       ├── test_v1_bo.py           # Core bounds validation checks
 │       ├── test_v1_bo_botorch.py   # active BoTorch simulation tests
 │       ├── test_v1_phase1_integration.py # Phase 1 integration schema verification
-│       └── test_v1_router.py       # API routing and handler verification
-├── data/                           # Historical research datasets (Team Alpha, Team Beta, dummy, etc.)
+│       ├── test_v1_router.py       # Active Learning API routing and handler verification
+│       └── test_v2_scaleup.py      # Digital Twin Scaleup mechanistic + endpoint validation tests
+├── data/                           # Historical research datasets (Alpha, Beta, dummy, etc.)
 │   ├── Final Dataset.json
 │   ├── team alpha finalised dummy dataset.json
-│   ├── team beta finalised dummy dataset.json
-│   ├── team_alpha_dummy.csv
-│   └── team_beta_dummy.csv
-├── frontend/
-│   └── src/
-│       └── components/
-│             └── Vector1/
-│                   └── ActiveLearningDashboard.jsx  # React Dashboard component
-└── phase1/
-    └── phase1_output.json          # Pareto solution reference output required for integration tests
+│   └── team beta finalised dummy dataset.json
+└── frontend/
+    ├── src/
+    │   ├── App.jsx                 # Main application UI and multi-tab system layout
+    │   └── components/
+    │         ├── Vector1/
+    │         │     └── ActiveLearningDashboard.jsx  # Active Learning interface with loop status & export
+    │         └── Vector2/
+    │               └── ScaleUpDashboard.jsx         # Physical Scale-Up digital twin simulator dashboard
 ```
 
 ---
 
-## 📊 Phase 1 Parameter Mapping (100 Unique Parameters)
+## ⚡ Unified Vector Features
 
-Following the formal specification **"Parameters used in phase 1 (Team Gamma)"**, this active learning loop is structurally designed to consume **100 unique physical, solid-state, biopharm, excipient, and process parameters** across 5 distinct execution steps:
+### 🔬 Vector 1: Bayesian Active Learning Engine
+- **LHS Seed Initialization**: Generates **8 space-filling seed experiments** using Latin Hypercube Sampling (LHS) to initially seed the design space.
+- **Mass-Balance Constraint Solver**: Restricts total excipient w/w concentrations to $\le 70\%$, maintaining a $30\%$ minimum margin for the active drug substance.
+- **Physics-Informed Dynamic Bounds**: Adapts process parameter search spaces dynamically by calculating safe boundaries relative to API thermal limits:
+  $$\text{Max Temp} = \min(100.0^\circ\text{C}, T_{\text{decomposition}} - 15^\circ\text{C}, T_{g} - 7^\circ\text{C}, T_{g,\text{excipient}} - 5^\circ\text{C})$$
+- **8-CQA Multi-Objective GP**: Fits 8 independent Gaussian Process models using Matérn kernels ($\nu = 2.5$).
+- **Optimized `qLogNEHVI` Suggestions**: Evaluates expected hypervolume improvement using a standard scikit-learn fallback layer to guarantee uptime.
+- **Audited Convergence HUD**: Monitors hypervolume indicators across rounds and reports flatline convergence ($\Delta HV < 0.01$, patience = 3).
+- **Handoff Export (JSON)**: Features a single-click button to download validated active loop summaries matching `phase1_output.json`.
 
-### 🔬 1. Parameter Sources
-*   **71 API physicochemical, solid-state, and stability parameters** (from Team Alpha's Dataset of 1,000 APIs). Out of 90 columns, 19 are metadata/provenance tags, leaving 71 genuine characterization parameters (e.g. molecular weight, logP, logD, pKa, ionization fractions, intrinsic solubility, decomposition onset, Carr's index, polymorphism risk, amorphous propensity, hygroscopicity, etc.).
-*   **25 Excipient characterization parameters** (from Team Beta's Dataset of 400 records). Includes thermodynamics (Hansen Solubility parameters, chi parameter), compatibility scores, polymer attributes, moisture/polymorphic risk, concentrations, and selection weights.
-*   **4 Nested Process/CPP parameters** (from Team Beta, inside `process_parameters`). These represent the key candidate **Critical Process Parameters (CPPs)**:
-    1.  `granulation_liquid_pct` (Liquid %)
-    2.  `impeller_speed_rpm` (Impeller Speed)
-    3.  `granulation_time_min` (Granulation Time)
-    4.  `drying_temp_c` (Drying Temperature)
-
-### 🗺️ 2. Parameter Routing Across the 5 Steps
-*   **Step 1 (Input Specs)**: Consumes **~96 parameters** (all API & excipient characterization fields) to establish compatibility.
-*   **Step 1.2 (CPP Bounds)**: Consumes **~13 parameters** (Tg, Melting Point, Decomp Onset, etc.) to set dynamic bounds.
-*   **Step 2 (Seed Design)**: Uses the **4 nested process parameters** as design variables.
-*   **Step 3 (GP Surrogate)**: Uses the **71 API parameters** as fixed covariates (context, not X-matrix variables).
-*   **Step 4 (EHVI)**: Uses **4 direct parameters** (SHAP, compatibility score, desirability weight, alternatives) + risk context.
-*   **Step 5 (Iteration/Convergence)**: Uses **~9 risk parameters** to feed the Risk/Uncertainty Map.
-
----
-
-## 📊 Output Data & Datasets
-
-This repository preserves all primary physical formulation output data and historical raw development datasets:
-
-### 1. Phase 1 Optimization Output (`phase1/phase1_output.json`)
-This is the core optimized data deliverable of the Phase 1 optimization sweep. It contains:
-- **API Target**: `Paracetamol` (BCS Class I).
-- **Primary Technique**: `wet_granulation` (Technique confidence: `0.699`).
-- **Optimization Sweep Space**: Run across 23 physical experiments, mapping 17 critical process parameters (CPPs) and critical material attributes (CMAs).
-- **Pareto Optimal Frontiers**: 16 distinct multi-objective Pareto-optimal solutions with optimized physical properties (CPP concentrations of Lactose Monohydrate, Starch 1500, DCPA, MCC PH101, PEG, HPC LF, Mannitol, drying temperatures, compression forces, scale parameters, and impeller/blade speeds).
-- **Predicted CQAs**: Each Pareto-optimal solution includes mean, standard deviation, and 95% confidence intervals for physical manufacturing attributes:
-  - *Hardness (N)*
-  - *Dissolution (30min %)*
-  - *Friability (%)*
-
-*Note: This dataset is parsed programmatically inside `backend/tests/test_v1_phase1_integration.py` to ensure schema constraints, physical mass balance, and data fidelity of Phase 1 solutions.*
-
-### 2. Historical & Dummy Production Datasets (`data/`)
-The `data/` folder contains original experimental trials and complete final datasets used during model research:
-- **`data/Final Dataset.json`**: An extensive formulation mapping database (176,780+ lines) detailing full process and recipe metrics.
-- **`data/team alpha finalised dummy dataset.json`**: Historical development trial database for Team Alpha.
-- **`data/team beta finalised dummy dataset.json`**: Historical development trial database for Team Beta.
-- **`data/team_alpha_dummy.csv` & `data/team_beta_dummy.csv`**: Structured CSV equivalents of Team Alpha and Team Beta initial trial configurations.
+### ⚙️ Vector 2: Digital Twin Scale-Up Simulator
+- **Multi-Granulator Equipment Database**: Stores geometries, volume capacities, impeller diameters, and maximum limits for both laboratory ($10\text{ L}$) and commercial ($300\text{ L}$) fluid-bed/granulation systems.
+- **Mechanistic Dimensionless Scaling**: Scales process parameters (RPM, spray rate, batch size) between equipment sizes using:
+  * **Froude Similarity ($Fr$)**: Scales impeller rotational speed to maintain equivalent physical liquid distributions.
+  * **Tip Speed ($v_{tip}$)**: Computes alternative shear boundaries.
+- **Machine Learning Residual Corrector**: Loads a pre-trained Random Forest model (`v2_residual_corrector.pkl`) that corrects the theoretical scaling rules for physical micro-granulation interactions.
+- **Turbulence Validation**: Computes output Reynolds numbers ($Re$) and issues a warning banner if flow transitions out of the turbulent regime ($Re < 10,000$).
+- **Industrial Adjustments**: Automatically applies a standard 15% safety increase to tablet compression force parameters during commercial scale runs.
 
 ---
 
 ## 🛠️ Installation & Setup
 
-### 1. Backend Setup (FastAPI & BoTorch)
+Ensure you have a Python environment and Node.js installed on your host.
 
-A virtual environment is already created at `backend/venv/`. To activate and start the service:
+### 1. Backend Setup (FastAPI & PyTorch)
+A configured Python 3.10 virtual environment is available under `/home/harshit/vector_1_p/backend/venv/`. To activate and verify it:
 
 ```bash
-# Navigate to backend directory
+# Navigate to backend folder
 cd backend/
 
-# Activate virtual environment
+# Activate the virtual environment
 source venv/bin/activate
 
-# Install dependencies (if not already installed)
+# Install dependencies (including testing tools)
 pip install -r requirements.txt
+pip install httpx
 ```
 
-### 2. Frontend Setup (React)
+### 2. Frontend Setup (React & Vite)
+The React front-end dashboard is located in `frontend/`. To run it:
 
-The frontend is implemented as a React Component designed to run inside a Vite environment. Ensure your frontend proxy or environment is pointing to port `8001` where the backend runs, or configure the fetch endpoints in `ActiveLearningDashboard.jsx` as needed.
+```bash
+# Navigate to the frontend directory
+cd frontend/
+
+# Start Vite server
+npm run dev
+```
 
 ---
 
 ## 🚀 Running the Services
 
-### 1. Start the FastAPI Backend
-With your virtual environment active, run the Uvicorn server:
+### 1. Launch FastAPI Backend
 ```bash
 cd backend/
-PYTHONPATH=. venv/bin/uvicorn main:app --host 0.0.0.0 --port 8001 --reload
+PYTHONPATH=. venv/bin/uvicorn main:app --host 0.0.0.0 --port 8001
 ```
-The server will start up and run at `http://localhost:8001`. You can view the fully documented Swagger API interactive docs at `http://localhost:8001/docs`.
+The REST API is live at `http://localhost:8001`. Interactive Swagger endpoints are viewable at `http://localhost:8001/docs`.
 
-### 2. Integrate the React Dashboard
-Import the `ActiveLearningDashboard` component in your React application routes or container:
-```javascript
-import ActiveLearningDashboard from './components/Vector1/ActiveLearningDashboard';
+### 2. Launch Vite Frontend Dashboard
+```bash
+cd frontend/
+npm run dev
 ```
+The React development server is live at `http://localhost:5173`.
+
+### 3. Port Forwarding for External Access (MacBook Air to VM)
+Execute the secure SSH port-forwarding command on your local Mac machine:
+```bash
+gcloud compute ssh enformis-gpu-instance \
+  --zone=asia-south1-b \
+  --project=ultra-472304 \
+  -- -L 5173:localhost:5173 -L 8001:localhost:8001
+```
+Now, open your Mac web browser and explore the platform at `http://localhost:5173/`.
 
 ---
 
-## 🧪 Running Tests
+## 🧪 Comprehensive Testing Suite
 
-The workspace features a comprehensive validation test suite powered by `pytest`.
+We maintain a rigorous engineering quality gate using the `pytest` test framework.
 
-Ensure you are in the `backend/` directory, and execute the following:
+To execute the full suite of **11 tests** (covering Vector 1, Vector 2, and router serialize endpoints):
 
 ```bash
-# Run the entire test suite with PYTHONPATH configured
 cd backend/
 PYTHONPATH=. venv/bin/pytest tests/
 ```
 
 ### What gets verified:
-- **`test_v1_bo.py`**: Standard physical bounds validation.
-- **`test_v1_bo_botorch.py`**: Multi-round optimization loop. Seeds 3 initialization experiments with Latin Hypercube Sampling (LHS), submits mock physical values, builds GP models, and generates acquisition suggestions.
-- **`test_v1_phase1_integration.py`**: Verifies processing and structure of the Phase 1 Pareto front schema.
-- **`test_v1_router.py`**: Ensures all REST endpoints successfully serialize and validate schema inputs.
+1.  🔬 **`tests/test_v1_bo.py`**: Validates basic physics boundaries and dynamic design constraint calculations.
+2.  📡 **`tests/test_v1_router.py`**: Verifies input serialization and model response formats of active Bayesian routes.
+3.  🎲 **`tests/test_v1_bo_botorch.py`**: Simulates the complete active learning loop (generating 8 LHS seeds, submitting outcomes, training GPs, evaluating EHVI, and suggesting iterations).
+4.  📊 **`tests/test_v1_phase1_detailed.py` & `test_v1_phase1_integration.py`**: Reconciles and parses the baseline output datasets for BCS Class-I API profiles.
+5.  ⚙️ **`tests/test_v2_scaleup.py`**: Specifically exercises the digital twin, ensuring Froude calculations, equipment geometries, and Random Forest corrector predictions produce physically-realistic operational values.
