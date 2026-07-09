@@ -410,12 +410,10 @@ class ActiveLearningLoop:
 
                 acqf = create_log_nehvi_acquisition(model_list, ref_point.tolist(), X_t)
 
-                # Combined search space bounds: first D dimensions [0.0, 1.0], next 6 dimensions fixed at descriptor values
-                bounds_t = torch.zeros(2, X.shape[1] + 6, dtype=torch.float64)
-                bounds_t[1, :X.shape[1]] = 1.0
-                for i, val in enumerate(v_context):
-                    bounds_t[0, X.shape[1] + i] = val
-                    bounds_t[1, X.shape[1] + i] = val
+                # Optimization is strictly performed on the D active dimensions to avoid SciPy stalls on fixed/degenerate bounds.
+                # The 6 physical API descriptors are appended dynamically inside the acquisition function wrapper.
+                bounds_t = torch.zeros(2, X.shape[1], dtype=torch.float64)
+                bounds_t[1] = 1.0
 
                 # Formulate dynamic in-loop linear inequality constraints for mass balance
                 # Sum of excipients <= 70% w/w (or dynamic excipient cap)
@@ -472,21 +470,26 @@ class ActiveLearningLoop:
                     upper_bounds=[inp.bounds[1] for inp in self.domain.inputs],
                     temp_lower=temp_lower,
                     temp_upper=temp_upper,
-                    gamma=0.15
+                    gamma=0.15,
+                    v_context=v_context
                 )
+
+                import os
+                num_restarts = int(os.environ.get("BO_RESTARTS", 2))
+                raw_samples = int(os.environ.get("BO_RAW_SAMPLES", 32))
 
                 candidate_sc, acqf_val = optimize_acqf(
                     acq_function=acqf,
                     bounds=bounds_t,
                     q=1,
-                    num_restarts=3,
-                    raw_samples=128,
+                    num_restarts=num_restarts,
+                    raw_samples=raw_samples,
                     inequality_constraints=inequality_constraints
                 )
 
                 candidate_sc_np = candidate_sc.detach().numpy().reshape(1, -1)
-                # Extract first D active dimensions
-                candidate_active = candidate_sc_np[:, :X.shape[1]]
+                # Candidate contains strictly active dimensions
+                candidate_active = candidate_sc_np
                 candidate_orig = scaler_x.inverse_transform(candidate_active)[0]
 
                 suggestion = {}

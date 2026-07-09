@@ -40,11 +40,16 @@ def create_log_nehvi_acquisition(model, ref_point: list[float], X_baseline: torc
     # 8 objectives with many non-dominated points causes CPU hypervolume partitioning to scale exponentially and hang.
     if X_baseline.shape[0] > 4:
         X_baseline = X_baseline[-4:]
+        
+    # Use a lightweight sampler (16 samples) to prevent CPU hypervolume partitioning from hanging on 8 objectives
+    from botorch.sampling.normal import SobolQMCNormalSampler
+    sampler = SobolQMCNormalSampler(sample_shape=torch.Size([16]))
     
     acq_func = qLogNoisyExpectedHypervolumeImprovement(
         model=model,
         ref_point=ref_tensor,
         X_baseline=X_baseline,
+        sampler=sampler,
         prune_baseline=True
     )
     return acq_func
@@ -53,7 +58,7 @@ if HAS_BOTORCH:
     from botorch.acquisition import AcquisitionFunction
     
     class CostAwareAcquisition(AcquisitionFunction):
-        def __init__(self, acq_func, exc_indices: list[int], lower_bounds: list[float], upper_bounds: list[float], temp_lower: float = 40.0, temp_upper: float = 80.0, gamma: float = 0.15):
+        def __init__(self, acq_func, exc_indices: list[int], lower_bounds: list[float], upper_bounds: list[float], temp_lower: float = 40.0, temp_upper: float = 80.0, gamma: float = 0.15, v_context: list[float] = None):
             super().__init__(acq_func.model)
             self.acq_func = acq_func
             self.exc_indices = exc_indices
@@ -62,10 +67,22 @@ if HAS_BOTORCH:
             self.temp_lower = temp_lower
             self.temp_upper = temp_upper
             self.gamma = gamma
+            self.v_context = v_context
             
         def forward(self, X: torch.Tensor) -> torch.Tensor:
             # X shape: (..., q, D) -- typically (b, 1, D) for q=1
-            base_val = self.acq_func(X)
+            
+            # Intercept and append physical context columns if provided, avoiding degenerate/fixed bounds during acquisition optimization
+            if self.v_context is not None:
+                context_tensor = torch.tensor(self.v_context, dtype=X.dtype, device=X.device)
+                batch_shape = X.shape[:-2]
+                q_dim = X.shape[-2]
+                context_expanded = context_tensor.view(1, 1, -1).expand(*batch_shape, q_dim, len(self.v_context))
+                X_combined = torch.cat([X, context_expanded], dim=-1)
+            else:
+                X_combined = X
+
+            base_val = self.acq_func(X_combined)
             
             # Compute physical process cost at candidate coordinates
             # Drying temp is index 2 of Critical Process Parameters

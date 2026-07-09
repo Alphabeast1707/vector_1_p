@@ -1,64 +1,94 @@
 {
   "schema_version": "1.0",
-  "timestamp": "2026-07-02T09:55:48.508084",
+  "timestamp": "2026-07-09T21:00:00.000000",
   "random_seed": 42,
   "api_name": "Paracetamol",
   "bcs_class": "I",
   "primary_technique": "wet_granulation",
   "technique_confidence": 0.699,
   "n_seed_experiments": 8,
-  "n_total_experiments": 23,
-  "n_pareto_solutions": 16,
-  "loo_cv_r2": -0.16860838828630995,
+  "n_total_experiments": 13,
+  "n_pareto_solutions": 12,
+  "loo_cv_r2": -1.0,
+  "loo_cv_calibration": {
+    "r2": {
+      "dissolution_q15": -1.0,
+      "dissolution_q30": -1.0,
+      "dissolution_q45": -1.0,
+      "dissolution_q60": -1.0,
+      "hardness_n": -1.0,
+      "friability_pct": -1.0,
+      "content_uniformity_pct": -1.0,
+      "compressibility_heckel_slope": -1.0
+    },
+    "crps": {
+      "dissolution_q15": 71.6312,
+      "dissolution_q30": 83.7158,
+      "dissolution_q45": 88.6564,
+      "dissolution_q60": 91.6245,
+      "hardness_n": 113.9143,
+      "friability_pct": 0.6341,
+      "content_uniformity_pct": 99.4115,
+      "compressibility_heckel_slope": 0.2382
+    },
+    "coverage_95": {
+      "dissolution_q15": 0.0,
+      "dissolution_q30": 0.0,
+      "dissolution_q45": 0.0,
+      "dissolution_q60": 0.0,
+      "hardness_n": 0.0,
+      "friability_pct": 1.0,
+      "content_uniformity_pct": 0.0,
+      "compressibility_heckel_slope": 1.0
+    }
+  },
   "pareto_solutions": [
     {
       "solution_id": 1,
       "cpps": {
-        "Lactose_monohydrate_pct": 45.0854995914741,
-        "Starch_1500_pct": 38.00629721824739,
-        "DCPA_pct": 43.505727422265124,
-        "MCC_PH101_pct": 34.77927194472113,
-        "PEG_6000_pct": 24.174534986706277,
-        "TBC_pct": 20.487697220851768,
-        "HPC_LF_pct": 35.82676439764258,
-        "PEG_4000_pct": 20.52999771483205,
-        "TEC_pct": 11.550078981172902,
-        "Mannitol_pct": 42.70424979516123,
-        "Granulation_Moisture_pct": 5.545023930387821,
-        "Drying_Temperature_C": 97.92033958629375,
-        "Compression_Force_kN": 12.500762542006095,
-        "Batch_Scale_kg": 90.12924663934098,
-        "Impeller_Speed_rpm": 318.7268749290414,
-        "Blade_Speed_rpm": 390.36209834194767,
-        "Scale_Factor": 1.2455820483410602
+        "binder_pct": 2.0308437156039454,
+        "Granulation_Moisture_pct": 4.280560780123974,
+        "Drying_Temperature_C": 95.17038670049848,
+        "Compression_Force_kN": 19.268092938248852,
+        "spray_rate_g_min": 10.955695787851095,
+        "Batch_Scale_kg": 63.17667339849515,
+        "Impeller_Speed_rpm": 247.95013803792204,
+        "Blade_Speed_rpm": 465.60968664413326,
+        "Scale_Factor": 19.695730122395577,
+        "Lactose_monohydrate_pct": 14.843451281748587,
+        "Starch_1500_pct": 14.108795776532821,
+        "DCPA_pct": 11.252674055336367,
+        "MCC_PH101_pct": 16.504713419364084,
+        "PEG_6000_pct": 3.472521099896486,
+        "HPC_LF_pct": 3.319967684484745
       },
       "cqa_predicted": {
         "Hardness_N": {
-          "mean": 109.28540077115684,
-          "std": 1.5272226851436752,
-          "ci95_lo": 106.29204430827524,
-          "ci95_hi": 112.27875723403845,
-          "in_spec": true
+          "mean": 122.08058544735825,
+          "std": 1.5,
+          "ci95_lo": 119.14058544735825,
+          "ci95_hi": 125.02058544735824,
+          "in_spec": false
         },
         "Dissolution_30min_pct": {
-          "mean": 96.07801097788281,
-          "std": 0.35829333634889665,
-          "ci95_lo": 95.37575603863897,
-          "ci95_hi": 96.78026591712666,
-          "in_spec": true
+          "mean": 83.01164171976498,
+          "std": 0.8,
+          "ci95_lo": 81.44364171976498,
+          "ci95_hi": 84.57964171976498,
+          "in_spec": false
         },
         "Friability_pct": {
-          "mean": -0.45970579427261676,
-          "std": 0.2569220692610878,
-          "ci95_lo": -0.9632730500243489,
-          "ci95_hi": 0.04386146147911535,
+          "mean": 0.8101247016633191,
+          "std": 0.05,
+          "ci95_lo": 0.7121247016633191,
+          "ci95_hi": 0.908124701663319,
           "in_spec": true
         },
         "Uniformity_RSD_pct": {
-          "mean": -2.078650373784548,
-          "std": 1.2855864120073135,
-          "ci95_lo": -4.598399741318882,
-          "ci95_hi": 0.44109899374978667,
+          "mean": -0.633492005896727,
+          "std": 0.2,
+          "ci95_lo": -1.025492005896727,
+          "ci95_hi": -0.24149200589672704,
           "in_spec": true
         }
       }
@@ -66,51 +96,49 @@
     {
       "solution_id": 2,
       "cpps": {
-        "Lactose_monohydrate_pct": 37.163650556302514,
-        "Starch_1500_pct": 31.994280664606404,
-        "DCPA_pct": 37.036349773299,
-        "MCC_PH101_pct": 32.314612496463184,
-        "PEG_6000_pct": 11.17388952818952,
-        "TBC_pct": 17.335124259680704,
-        "HPC_LF_pct": 39.274665981410394,
-        "PEG_4000_pct": 15.942192412286264,
-        "TEC_pct": 13.83466575750259,
-        "Mannitol_pct": 45.08130278014367,
-        "Granulation_Moisture_pct": 6.730938615125694,
-        "Drying_Temperature_C": 75.79180210981227,
-        "Compression_Force_kN": 8.768851797425954,
-        "Batch_Scale_kg": 10.637042436576708,
-        "Impeller_Speed_rpm": 358.1852294302904,
-        "Blade_Speed_rpm": 222.18078881802336,
-        "Scale_Factor": 16.65342429226836
+        "binder_pct": 2.992544338349154,
+        "Granulation_Moisture_pct": 4.722707606492083,
+        "Drying_Temperature_C": 60.26602793441401,
+        "Compression_Force_kN": 12.616283759515763,
+        "spray_rate_g_min": 28.02604875274355,
+        "Batch_Scale_kg": 78.24366421644349,
+        "Impeller_Speed_rpm": 396.98948889431824,
+        "Blade_Speed_rpm": 326.28196143272294,
+        "Scale_Factor": 8.378837336859782,
+        "Lactose_monohydrate_pct": 14.620077882435103,
+        "Starch_1500_pct": 6.465477008422171,
+        "DCPA_pct": 20.284946780661045,
+        "MCC_PH101_pct": 14.61078346099609,
+        "PEG_6000_pct": 3.0712807345768716,
+        "HPC_LF_pct": 3.4878568275265986
       },
       "cqa_predicted": {
         "Hardness_N": {
-          "mean": 93.44029726118899,
-          "std": 1.4949651034318114,
-          "ci95_lo": 90.51016565846264,
-          "ci95_hi": 96.37042886391534,
+          "mean": 112.33640355528354,
+          "std": 1.5,
+          "ci95_lo": 109.39640355528354,
+          "ci95_hi": 115.27640355528354,
           "in_spec": true
         },
         "Dissolution_30min_pct": {
-          "mean": 93.58584355796357,
-          "std": 0.3582933379347167,
-          "ci95_lo": 92.88358861561153,
-          "ci95_hi": 94.28809850031561,
-          "in_spec": true
+          "mean": 83.51040652090363,
+          "std": 0.8,
+          "ci95_lo": 81.94240652090363,
+          "ci95_hi": 85.07840652090363,
+          "in_spec": false
         },
         "Friability_pct": {
-          "mean": -0.5890720537246562,
-          "std": 0.2569220693980205,
-          "ci95_lo": -1.0926393097447762,
-          "ci95_hi": -0.08550479770453612,
-          "in_spec": true
+          "mean": 1.0408553246351058,
+          "std": 0.05,
+          "ci95_lo": 0.9428553246351058,
+          "ci95_hi": 1.1388553246351059,
+          "in_spec": false
         },
         "Uniformity_RSD_pct": {
-          "mean": -1.1654014829514527,
-          "std": 1.2855864120073683,
-          "ci95_lo": -3.6851508504858947,
-          "ci95_hi": 1.3543478845829893,
+          "mean": 0.3512150201095352,
+          "std": 0.2,
+          "ci95_lo": -0.04078497989046481,
+          "ci95_hi": 0.7432150201095352,
           "in_spec": true
         }
       }
@@ -118,51 +146,49 @@
     {
       "solution_id": 3,
       "cpps": {
-        "Lactose_monohydrate_pct": 35.5385334698283,
-        "Starch_1500_pct": 30.176156244928876,
-        "DCPA_pct": 32.06114593370184,
-        "MCC_PH101_pct": 43.0679766770714,
-        "PEG_6000_pct": 12.973678397710714,
-        "TBC_pct": 8.894441166622904,
-        "HPC_LF_pct": 31.322335038951515,
-        "PEG_4000_pct": 14.336805923580943,
-        "TEC_pct": 7.524566526069243,
-        "Mannitol_pct": 40.96996324728336,
-        "Granulation_Moisture_pct": 3.7031934307200354,
-        "Drying_Temperature_C": 80.00962905010392,
-        "Compression_Force_kN": 10.311256078546714,
-        "Batch_Scale_kg": 22.246516090842572,
-        "Impeller_Speed_rpm": 431.4040704901608,
-        "Blade_Speed_rpm": 462.57293326288953,
-        "Scale_Factor": 17.679159193695533
+        "binder_pct": 2.8046053372130624,
+        "Granulation_Moisture_pct": 5.0162451337828955,
+        "Drying_Temperature_C": 64.4172323604729,
+        "Compression_Force_kN": 15.712773124675902,
+        "spray_rate_g_min": 25.4076380897631,
+        "Batch_Scale_kg": 97.65529193133196,
+        "Impeller_Speed_rpm": 231.8159341415731,
+        "Blade_Speed_rpm": 260.4379094776154,
+        "Scale_Factor": 14.71109029600415,
+        "Lactose_monohydrate_pct": 15.569877369721993,
+        "Starch_1500_pct": 11.26100908833876,
+        "DCPA_pct": 12.47751189794571,
+        "MCC_PH101_pct": 17.042185052223832,
+        "PEG_6000_pct": 4.460985568843085,
+        "HPC_LF_pct": 1.9167927186805962
       },
       "cqa_predicted": {
         "Hardness_N": {
-          "mean": 97.66696618427432,
-          "std": 1.2814433939427,
-          "ci95_lo": 95.15533713214663,
-          "ci95_hi": 100.178595236402,
+          "mean": 119.40706925790288,
+          "std": 1.5,
+          "ci95_lo": 116.46706925790288,
+          "ci95_hi": 122.34706925790287,
           "in_spec": true
         },
         "Dissolution_30min_pct": {
-          "mean": 89.87872515017226,
-          "std": 0.3582933369252539,
-          "ci95_lo": 89.17647020979877,
-          "ci95_hi": 90.58098009054575,
-          "in_spec": true
+          "mean": 82.3376549811094,
+          "std": 0.8,
+          "ci95_lo": 80.7696549811094,
+          "ci95_hi": 83.9056549811094,
+          "in_spec": false
         },
         "Friability_pct": {
-          "mean": -0.7736028827752365,
-          "std": 0.2569220692794344,
-          "ci95_lo": -1.277170138562928,
-          "ci95_hi": -0.270035626987545,
+          "mean": 0.8998273371247137,
+          "std": 0.05,
+          "ci95_lo": 0.8018273371247138,
+          "ci95_hi": 0.9978273371247137,
           "in_spec": true
         },
         "Uniformity_RSD_pct": {
-          "mean": -1.5022952467516277,
-          "std": 1.2855864120073648,
-          "ci95_lo": -4.022044614286063,
-          "ci95_hi": 1.0174541207828072,
+          "mean": -0.22398795094728996,
+          "std": 0.2,
+          "ci95_lo": -0.61598795094729,
+          "ci95_hi": 0.16801204905271006,
           "in_spec": true
         }
       }
@@ -170,51 +196,49 @@
     {
       "solution_id": 4,
       "cpps": {
-        "Lactose_monohydrate_pct": 37.93246861153232,
-        "Starch_1500_pct": 35.39930185966683,
-        "DCPA_pct": 39.21879499641541,
-        "MCC_PH101_pct": 31.508118025580412,
-        "PEG_6000_pct": 20.567273372627213,
-        "TBC_pct": 10.73806334175478,
-        "HPC_LF_pct": 45.07516249760506,
-        "PEG_4000_pct": 11.229060147071948,
-        "TEC_pct": 10.368918909351745,
-        "Mannitol_pct": 31.653468454457073,
-        "Granulation_Moisture_pct": 3.3321567701636936,
-        "Drying_Temperature_C": 67.10675557776158,
-        "Compression_Force_kN": 21.31497366810148,
-        "Batch_Scale_kg": 31.310848589029384,
-        "Impeller_Speed_rpm": 219.09085614120795,
-        "Blade_Speed_rpm": 426.93142803955936,
-        "Scale_Factor": 4.770655858922066
+        "binder_pct": 2.323133924901851,
+        "Granulation_Moisture_pct": 3.806260810484913,
+        "Drying_Temperature_C": 92.75315441539237,
+        "Compression_Force_kN": 17.174697054053176,
+        "spray_rate_g_min": 17.06327348872091,
+        "Batch_Scale_kg": 35.651135994370534,
+        "Impeller_Speed_rpm": 455.9279006983935,
+        "Blade_Speed_rpm": 290.57205848428146,
+        "Scale_Factor": 4.170979215593924,
+        "Lactose_monohydrate_pct": 10.797090255791703,
+        "Starch_1500_pct": 14.981009998815589,
+        "DCPA_pct": 9.687139911073647,
+        "MCC_PH101_pct": 21.012623235744783,
+        "PEG_6000_pct": 2.7601813107549003,
+        "HPC_LF_pct": 3.971788395884558
       },
       "cqa_predicted": {
         "Hardness_N": {
-          "mean": 125.48235497630444,
-          "std": 1.0998087053907537,
-          "ci95_lo": 123.32672991373856,
-          "ci95_hi": 127.63798003887031,
+          "mean": 125.4138484498922,
+          "std": 1.5,
+          "ci95_lo": 122.4738484498922,
+          "ci95_hi": 128.3538484498922,
           "in_spec": false
         },
         "Dissolution_30min_pct": {
-          "mean": 85.13990500236578,
-          "std": 0.25362225887061296,
-          "ci95_lo": 84.64280537497937,
-          "ci95_hi": 85.63700462975218,
-          "in_spec": true
+          "mean": 82.3101374006582,
+          "std": 0.8,
+          "ci95_lo": 80.74213740065821,
+          "ci95_hi": 83.8781374006582,
+          "in_spec": false
         },
         "Friability_pct": {
-          "mean": -0.03183419449248212,
-          "std": 0.19360199584960286,
-          "ci95_lo": -0.4112941063577037,
-          "ci95_hi": 0.3476257173727395,
+          "mean": 0.7113443120006794,
+          "std": 0.05,
+          "ci95_lo": 0.6133443120006794,
+          "ci95_hi": 0.8093443120006794,
           "in_spec": true
         },
         "Uniformity_RSD_pct": {
-          "mean": -0.19099546086962305,
-          "std": 1.0298757634406666,
-          "ci95_lo": -2.2095519572133293,
-          "ci95_hi": 1.8275610354740834,
+          "mean": -0.7894264481401478,
+          "std": 0.2,
+          "ci95_lo": -1.1814264481401477,
+          "ci95_hi": -0.3974264481401478,
           "in_spec": true
         }
       }
@@ -222,51 +246,49 @@
     {
       "solution_id": 5,
       "cpps": {
-        "Lactose_monohydrate_pct": 31.49953984407718,
-        "Starch_1500_pct": 39.93745324245407,
-        "DCPA_pct": 31.07450802484318,
-        "MCC_PH101_pct": 38.04893589088087,
-        "PEG_6000_pct": 18.689262315564832,
-        "TBC_pct": 18.57339155543912,
-        "HPC_LF_pct": 40.975648534647064,
-        "PEG_4000_pct": 8.137482391905788,
-        "TEC_pct": 17.038859046052533,
-        "Mannitol_pct": 36.35768129079262,
-        "Granulation_Moisture_pct": 6.361179675298225,
-        "Drying_Temperature_C": 90.4460055014568,
-        "Compression_Force_kN": 18.430733967753667,
-        "Batch_Scale_kg": 74.04470465723003,
-        "Impeller_Speed_rpm": 400.2265043228535,
-        "Blade_Speed_rpm": 241.19443904987014,
-        "Scale_Factor": 10.322160281144892
+        "binder_pct": 2.9163887186876885,
+        "Granulation_Moisture_pct": 6.264451896928434,
+        "Drying_Temperature_C": 85.57054690104331,
+        "Compression_Force_kN": 21.249377427990943,
+        "spray_rate_g_min": 21.766505249998154,
+        "Batch_Scale_kg": 56.0244549168573,
+        "Impeller_Speed_rpm": 300.5346867173881,
+        "Blade_Speed_rpm": 224.20218320976073,
+        "Scale_Factor": 12.801807642901144,
+        "Lactose_monohydrate_pct": 14.299963447554259,
+        "Starch_1500_pct": 21.330961511428427,
+        "DCPA_pct": 6.830263027352971,
+        "MCC_PH101_pct": 12.365371193953825,
+        "PEG_6000_pct": 5.588332301823256,
+        "HPC_LF_pct": 2.2016868321666037
       },
       "cqa_predicted": {
         "Hardness_N": {
-          "mean": 102.34396300180613,
-          "std": 1.5974469727538003,
-          "ci95_lo": 99.21296693520868,
-          "ci95_hi": 105.47495906840358,
+          "mean": 116.6956730954507,
+          "std": 1.5,
+          "ci95_lo": 113.7556730954507,
+          "ci95_hi": 119.6356730954507,
           "in_spec": true
         },
         "Dissolution_30min_pct": {
-          "mean": 91.15060438920881,
-          "std": 0.35829333795675933,
-          "ci95_lo": 90.44834944681357,
-          "ci95_hi": 91.85285933160405,
+          "mean": 85.40391867112037,
+          "std": 0.8,
+          "ci95_lo": 83.83591867112037,
+          "ci95_hi": 86.97191867112036,
           "in_spec": true
         },
         "Friability_pct": {
-          "mean": -0.4974639233359917,
-          "std": 0.256922069398977,
-          "ci95_lo": -1.0010311793579867,
-          "ci95_hi": 0.0061033326860032155,
+          "mean": 0.942483644516726,
+          "std": 0.05,
+          "ci95_lo": 0.844483644516726,
+          "ci95_hi": 1.040483644516726,
           "in_spec": true
         },
         "Uniformity_RSD_pct": {
-          "mean": -1.8822844683074098,
-          "std": 1.2855864120073683,
-          "ci95_lo": -4.402033835841852,
-          "ci95_hi": 0.6374648992270322,
+          "mean": -0.3592943751857405,
+          "std": 0.2,
+          "ci95_lo": -0.7512943751857405,
+          "ci95_hi": 0.03270562481425954,
           "in_spec": true
         }
       }
@@ -274,51 +296,49 @@
     {
       "solution_id": 6,
       "cpps": {
-        "Lactose_monohydrate_pct": 32.7878269770196,
-        "Starch_1500_pct": 36.38531454011091,
-        "DCPA_pct": 45.29292217256176,
-        "MCC_PH101_pct": 45.43705010659128,
-        "PEG_6000_pct": 5.81456339534538,
-        "TBC_pct": 5.928947827603703,
-        "HPC_LF_pct": 42.991257921088526,
-        "PEG_4000_pct": 9.279593996255315,
-        "TEC_pct": 9.158711636211297,
-        "Mannitol_pct": 38.31883790567295,
-        "Granulation_Moisture_pct": 4.583486459953852,
-        "Drying_Temperature_C": 55.90715375706401,
-        "Compression_Force_kN": 20.11187765934784,
-        "Batch_Scale_kg": 80.89023158669094,
-        "Impeller_Speed_rpm": 245.2338092535914,
-        "Blade_Speed_rpm": 175.55428613993217,
-        "Scale_Factor": 6.155158300275105
+        "binder_pct": 3.065931929443545,
+        "Granulation_Moisture_pct": 6.853203121116659,
+        "Drying_Temperature_C": 68.15171960466121,
+        "Compression_Force_kN": 23.816306676274785,
+        "spray_rate_g_min": 18.175318096542455,
+        "Batch_Scale_kg": 5.154119938448579,
+        "Impeller_Speed_rpm": 175.97057481199693,
+        "Blade_Speed_rpm": 420.636608170861,
+        "Scale_Factor": 7.728439315219203,
+        "Lactose_monohydrate_pct": 24.869412023913092,
+        "Starch_1500_pct": 11.377023576094448,
+        "DCPA_pct": 11.873095649204581,
+        "MCC_PH101_pct": 10.752282848776229,
+        "PEG_6000_pct": 1.547176993332661,
+        "HPC_LF_pct": 2.0480440122024763
       },
       "cqa_predicted": {
         "Hardness_N": {
-          "mean": 114.97729439860399,
-          "std": 1.4876101715252439,
-          "ci95_lo": 112.06157846241452,
-          "ci95_hi": 117.89301033479346,
+          "mean": 114.3216494328632,
+          "std": 1.5,
+          "ci95_lo": 111.3816494328632,
+          "ci95_hi": 117.2616494328632,
           "in_spec": true
         },
         "Dissolution_30min_pct": {
-          "mean": 79.07805407232556,
-          "std": 0.3582933379566501,
-          "ci95_lo": 78.37579912993053,
-          "ci95_hi": 79.78030901472059,
+          "mean": 85.88532764845755,
+          "std": 0.8,
+          "ci95_lo": 84.31732764845755,
+          "ci95_hi": 87.45332764845755,
           "in_spec": true
         },
         "Friability_pct": {
-          "mean": -0.5237490507365928,
-          "std": 0.25692206939897166,
-          "ci95_lo": -1.0273163067585773,
-          "ci95_hi": -0.020181794714608348,
-          "in_spec": true
+          "mean": 1.1163071614496425,
+          "std": 0.05,
+          "ci95_lo": 1.0183071614496424,
+          "ci95_hi": 1.2143071614496426,
+          "in_spec": false
         },
         "Uniformity_RSD_pct": {
-          "mean": -2.2975171792647027,
-          "std": 1.2855864120073683,
-          "ci95_lo": -4.817266546799145,
-          "ci95_hi": 0.22223218826973934,
+          "mean": 0.5700529898485343,
+          "std": 0.2,
+          "ci95_lo": 0.17805298984853424,
+          "ci95_hi": 0.9620529898485343,
           "in_spec": true
         }
       }
@@ -326,51 +346,49 @@
     {
       "solution_id": 7,
       "cpps": {
-        "Lactose_monohydrate_pct": 32.60683610375079,
-        "Starch_1500_pct": 30.0,
-        "DCPA_pct": 35.15631622687335,
-        "MCC_PH101_pct": 40.81291431568138,
-        "PEG_6000_pct": 5.672694260580904,
-        "TBC_pct": 12.204548837571389,
-        "HPC_LF_pct": 31.659221199381335,
-        "PEG_4000_pct": 9.259917193072575,
-        "TEC_pct": 6.3849130249661945,
-        "Mannitol_pct": 38.66371766611785,
-        "Granulation_Moisture_pct": 3.0,
-        "Drying_Temperature_C": 65.0393366558194,
-        "Compression_Force_kN": 9.973641306381346,
-        "Batch_Scale_kg": 86.07887972886684,
-        "Impeller_Speed_rpm": 500.0,
-        "Blade_Speed_rpm": 303.2436497230344,
-        "Scale_Factor": 10.174045070769433
+        "binder_pct": 2.4316731842244783,
+        "Granulation_Moisture_pct": 5.651839812461132,
+        "Drying_Temperature_C": 80.61537094989608,
+        "Compression_Force_kN": 9.315329894544975,
+        "spray_rate_g_min": 7.182774721412885,
+        "Batch_Scale_kg": 42.70025291015376,
+        "Impeller_Speed_rpm": 352.92069828828915,
+        "Blade_Speed_rpm": 408.6653160299206,
+        "Scale_Factor": 17.344735982463774,
+        "Lactose_monohydrate_pct": 17.63712090663015,
+        "Starch_1500_pct": 6.447645975839935,
+        "DCPA_pct": 17.4496025498856,
+        "MCC_PH101_pct": 14.24534884664017,
+        "PEG_6000_pct": 4.199685940683343,
+        "HPC_LF_pct": 3.1218896290633578
       },
       "cqa_predicted": {
         "Hardness_N": {
-          "mean": 93.23814956874395,
-          "std": 1.4055618741569917,
-          "ci95_lo": 90.48324829539625,
-          "ci95_hi": 95.99305084209165,
+          "mean": 104.70059569582996,
+          "std": 1.5,
+          "ci95_lo": 101.76059569582996,
+          "ci95_hi": 107.64059569582996,
           "in_spec": true
         },
         "Dissolution_30min_pct": {
-          "mean": 84.29062113227813,
-          "std": 0.35829333768204447,
-          "ci95_lo": 83.58836619042133,
-          "ci95_hi": 84.99287607413494,
+          "mean": 85.17304466989323,
+          "std": 0.8,
+          "ci95_lo": 83.60504466989323,
+          "ci95_hi": 86.74104466989323,
           "in_spec": true
         },
         "Friability_pct": {
-          "mean": -0.848392993846088,
-          "std": 0.25692206928702693,
-          "ci95_lo": -1.351960249648661,
-          "ci95_hi": -0.34482573804351524,
-          "in_spec": true
+          "mean": 1.1018291149536574,
+          "std": 0.05,
+          "ci95_lo": 1.0038291149536573,
+          "ci95_hi": 1.1998291149536575,
+          "in_spec": false
         },
         "Uniformity_RSD_pct": {
-          "mean": -2.053962765372429,
-          "std": 1.2855864120073661,
-          "ci95_lo": -4.573712132906866,
-          "ci95_hi": 0.46578660216200873,
+          "mean": -0.35806087005381926,
+          "std": 0.2,
+          "ci95_lo": -0.7500608700538193,
+          "ci95_hi": 0.03393912994618076,
           "in_spec": true
         }
       }
@@ -378,51 +396,49 @@
     {
       "solution_id": 8,
       "cpps": {
-        "Lactose_monohydrate_pct": 45.5,
-        "Starch_1500_pct": 30.0,
-        "DCPA_pct": 30.0,
-        "MCC_PH101_pct": 38.16361173703308,
-        "PEG_6000_pct": 6.599761968433396,
-        "TBC_pct": 5.0,
-        "HPC_LF_pct": 41.396737735743535,
-        "PEG_4000_pct": 9.275625480825077,
-        "TEC_pct": 10.598941291866314,
-        "Mannitol_pct": 41.104651643261114,
-        "Granulation_Moisture_pct": 6.876654689464154,
-        "Drying_Temperature_C": 76.43206150273434,
-        "Compression_Force_kN": 25.0,
-        "Batch_Scale_kg": 15.736251027882709,
-        "Impeller_Speed_rpm": 150.0,
-        "Blade_Speed_rpm": 150.0,
-        "Scale_Factor": 3.2071317379057467
+        "binder_pct": 3.392568222479806,
+        "Granulation_Moisture_pct": 3.2753192489281058,
+        "Drying_Temperature_C": 75.96864121462099,
+        "Compression_Force_kN": 12.045169205423814,
+        "spray_rate_g_min": 11.554367510800494,
+        "Batch_Scale_kg": 20.109768413309062,
+        "Impeller_Speed_rpm": 491.14660279020865,
+        "Blade_Speed_rpm": 180.36439769340896,
+        "Scale_Factor": 1.9993535237629971,
+        "Lactose_monohydrate_pct": 23.04636294662835,
+        "Starch_1500_pct": 8.585981194518395,
+        "DCPA_pct": 9.821554767842583,
+        "MCC_PH101_pct": 16.138455979838547,
+        "PEG_6000_pct": 3.3877078527118787,
+        "HPC_LF_pct": 1.160336068947485
       },
       "cqa_predicted": {
         "Hardness_N": {
-          "mean": 141.53303522012723,
-          "std": 1.4711571271910195,
-          "ci95_lo": 138.64956725083283,
-          "ci95_hi": 144.41650318942163,
-          "in_spec": false
+          "mean": 106.07557275476766,
+          "std": 1.5,
+          "ci95_lo": 103.13557275476767,
+          "ci95_hi": 109.01557275476766,
+          "in_spec": true
         },
         "Dissolution_30min_pct": {
-          "mean": 87.07398449142867,
-          "std": 0.3582933374521801,
-          "ci95_lo": 86.37172955002241,
-          "ci95_hi": 87.77623943283494,
-          "in_spec": true
+          "mean": 84.67097514509715,
+          "std": 0.8,
+          "ci95_lo": 83.10297514509715,
+          "ci95_hi": 86.23897514509714,
+          "in_spec": false
         },
         "Friability_pct": {
-          "mean": -0.0915703078382687,
-          "std": 0.25692206934993017,
-          "ci95_lo": -0.5951375637641318,
-          "ci95_hi": 0.41199694808759446,
-          "in_spec": true
+          "mean": 1.14557542998786,
+          "std": 0.05,
+          "ci95_lo": 1.04757542998786,
+          "ci95_hi": 1.24357542998786,
+          "in_spec": false
         },
         "Uniformity_RSD_pct": {
-          "mean": -2.01336344708006,
-          "std": 1.2855864120073683,
-          "ci95_lo": -4.533112814614502,
-          "ci95_hi": 0.5063859204543819,
+          "mean": -0.4436045225246801,
+          "std": 0.2,
+          "ci95_lo": -0.8356045225246801,
+          "ci95_hi": -0.05160452252468006,
           "in_spec": true
         }
       }
@@ -430,51 +446,49 @@
     {
       "solution_id": 9,
       "cpps": {
-        "Lactose_monohydrate_pct": 30.0,
-        "Starch_1500_pct": 34.84626296151801,
-        "DCPA_pct": 35.115698702231015,
-        "MCC_PH101_pct": 43.72157544288,
-        "PEG_6000_pct": 5.0,
-        "TBC_pct": 5.598228644502662,
-        "HPC_LF_pct": 42.93706368641839,
-        "PEG_4000_pct": 16.854386458414464,
-        "TEC_pct": 15.784736623136695,
-        "Mannitol_pct": 37.84103742623689,
-        "Granulation_Moisture_pct": 3.623629306864707,
-        "Drying_Temperature_C": 55.0,
-        "Compression_Force_kN": 8.585147810566948,
-        "Batch_Scale_kg": 75.4609991809711,
-        "Impeller_Speed_rpm": 207.4147533792838,
-        "Blade_Speed_rpm": 500.0,
-        "Scale_Factor": 1.0
+        "binder_pct": 2.0308437156039454,
+        "Granulation_Moisture_pct": 4.289386063206464,
+        "Drying_Temperature_C": 60.26602793441401,
+        "Compression_Force_kN": 20.178970330989703,
+        "spray_rate_g_min": 9.102615362184457,
+        "Batch_Scale_kg": 19.709534717365425,
+        "Impeller_Speed_rpm": 330.7179017886009,
+        "Blade_Speed_rpm": 196.8788533554977,
+        "Scale_Factor": 5.326925940231898,
+        "Lactose_monohydrate_pct": 10.797090255791705,
+        "Starch_1500_pct": 6.4476459758399365,
+        "DCPA_pct": 6.830263027352971,
+        "MCC_PH101_pct": 10.752282848776229,
+        "PEG_6000_pct": 1.5471769933326611,
+        "HPC_LF_pct": 1.160336068947485
       },
       "cqa_predicted": {
         "Hardness_N": {
-          "mean": 93.75634127368,
-          "std": 1.6865778327664191,
-          "ci95_lo": 90.45064872145781,
-          "ci95_hi": 97.06203382590218,
+          "mean": 111.16003825347394,
+          "std": 1.5,
+          "ci95_lo": 108.22003825347394,
+          "ci95_hi": 114.10003825347394,
           "in_spec": true
         },
         "Dissolution_30min_pct": {
-          "mean": 82.7297337791721,
-          "std": 0.3582933379462251,
-          "ci95_lo": 82.0274788367975,
-          "ci95_hi": 83.43198872154669,
+          "mean": 85.50282072866659,
+          "std": 0.8,
+          "ci95_lo": 83.9348207286666,
+          "ci95_hi": 87.07082072866659,
           "in_spec": true
         },
         "Friability_pct": {
-          "mean": -0.8838791581465655,
-          "std": 0.25692206939894946,
-          "ci95_lo": -1.3874464141685063,
-          "ci95_hi": -0.3803119021246245,
-          "in_spec": true
+          "mean": 1.2731171097635652,
+          "std": 0.05,
+          "ci95_lo": 1.175117109763565,
+          "ci95_hi": 1.3711171097635653,
+          "in_spec": false
         },
         "Uniformity_RSD_pct": {
-          "mean": -2.522737740272805,
-          "std": 1.2855864120073681,
-          "ci95_lo": -5.042487107807247,
-          "ci95_hi": -0.0029883727383634984,
+          "mean": 0.5791917605861272,
+          "std": 0.2,
+          "ci95_lo": 0.1871917605861272,
+          "ci95_hi": 0.9711917605861272,
           "in_spec": true
         }
       }
@@ -482,51 +496,49 @@
     {
       "solution_id": 10,
       "cpps": {
-        "Lactose_monohydrate_pct": 45.5,
-        "Starch_1500_pct": 31.384476835023115,
-        "DCPA_pct": 39.575559195316735,
-        "MCC_PH101_pct": 42.22228758615535,
-        "PEG_6000_pct": 11.624865430811589,
-        "TBC_pct": 8.799279720865455,
-        "HPC_LF_pct": 34.035938738486934,
-        "PEG_4000_pct": 9.617401760833845,
-        "TEC_pct": 13.03895286539117,
-        "Mannitol_pct": 31.13872207827889,
-        "Granulation_Moisture_pct": 3.950707562300124,
-        "Drying_Temperature_C": 63.65838673210557,
-        "Compression_Force_kN": 14.755402142143447,
-        "Batch_Scale_kg": 1.0,
-        "Impeller_Speed_rpm": 203.0736897988919,
-        "Blade_Speed_rpm": 150.0,
-        "Scale_Factor": 20.0
+        "binder_pct": 2.0308437156039454,
+        "Granulation_Moisture_pct": 4.598774319663734,
+        "Drying_Temperature_C": 60.266027934414026,
+        "Compression_Force_kN": 9.315329894544975,
+        "spray_rate_g_min": 28.026048752743545,
+        "Batch_Scale_kg": 45.44934997235818,
+        "Impeller_Speed_rpm": 293.08476228698913,
+        "Blade_Speed_rpm": 465.60968664413326,
+        "Scale_Factor": 19.695730122395577,
+        "Lactose_monohydrate_pct": 10.797090255791705,
+        "Starch_1500_pct": 6.447645975839936,
+        "DCPA_pct": 6.830263027352971,
+        "MCC_PH101_pct": 10.752282848776229,
+        "PEG_6000_pct": 1.547176993332661,
+        "HPC_LF_pct": 1.160336068947485
       },
       "cqa_predicted": {
         "Hardness_N": {
-          "mean": 117.29503799233119,
-          "std": 1.6058819936167565,
-          "ci95_lo": 114.14750928484234,
-          "ci95_hi": 120.44256669982003,
+          "mean": 96.5966385805808,
+          "std": 1.5,
+          "ci95_lo": 93.6566385805808,
+          "ci95_hi": 99.5366385805808,
           "in_spec": true
         },
         "Dissolution_30min_pct": {
-          "mean": 87.14638862203431,
-          "std": 0.3582933377544402,
-          "ci95_lo": 86.4441336800356,
-          "ci95_hi": 87.84864356403301,
+          "mean": 86.52869136114711,
+          "std": 0.8,
+          "ci95_lo": 84.96069136114711,
+          "ci95_hi": 88.09669136114711,
           "in_spec": true
         },
         "Friability_pct": {
-          "mean": -0.5166274223613379,
-          "std": 0.25692206939550327,
-          "ci95_lo": -1.0201946783765243,
-          "ci95_hi": -0.01306016634615148,
-          "in_spec": true
+          "mean": 1.4722365464176645,
+          "std": 0.05,
+          "ci95_lo": 1.3742365464176645,
+          "ci95_hi": 1.5702365464176646,
+          "in_spec": false
         },
         "Uniformity_RSD_pct": {
-          "mean": -1.9153125362070231,
-          "std": 1.2855864120073675,
-          "ci95_lo": -4.435061903741463,
-          "ci95_hi": 0.6044368313274171,
+          "mean": -1.0265507113275305,
+          "std": 0.2,
+          "ci95_lo": -1.4185507113275304,
+          "ci95_hi": -0.6345507113275305,
           "in_spec": true
         }
       }
@@ -534,51 +546,49 @@
     {
       "solution_id": 11,
       "cpps": {
-        "Lactose_monohydrate_pct": 36.002534282486046,
-        "Starch_1500_pct": 30.0,
-        "DCPA_pct": 33.099666123954776,
-        "MCC_PH101_pct": 36.28799701754777,
-        "PEG_6000_pct": 6.3452207273600285,
-        "TBC_pct": 15.27586027057826,
-        "HPC_LF_pct": 43.43159944557178,
-        "PEG_4000_pct": 5.0,
-        "TEC_pct": 9.175855898946976,
-        "Mannitol_pct": 41.478474194451756,
-        "Granulation_Moisture_pct": 7.0,
-        "Drying_Temperature_C": 68.92854572376348,
-        "Compression_Force_kN": 17.635823098853702,
-        "Batch_Scale_kg": 53.06662426352075,
-        "Impeller_Speed_rpm": 197.80006465430426,
-        "Blade_Speed_rpm": 218.3833335747005,
-        "Scale_Factor": 1.0
+        "binder_pct": 2.1496784844547197,
+        "Granulation_Moisture_pct": 3.293868923251941,
+        "Drying_Temperature_C": 95.17038670049848,
+        "Compression_Force_kN": 23.81630667627478,
+        "spray_rate_g_min": 15.383715908268675,
+        "Batch_Scale_kg": 97.65529193133196,
+        "Impeller_Speed_rpm": 284.71381678759,
+        "Blade_Speed_rpm": 297.21552718461805,
+        "Scale_Factor": 6.600651346738018,
+        "Lactose_monohydrate_pct": 10.797090255791707,
+        "Starch_1500_pct": 6.447645975839938,
+        "DCPA_pct": 6.830263027352971,
+        "MCC_PH101_pct": 17.55436947576226,
+        "PEG_6000_pct": 2.209757103386402,
+        "HPC_LF_pct": 3.9717883958845577
       },
       "cqa_predicted": {
         "Hardness_N": {
-          "mean": 114.16151974548606,
-          "std": 1.50233693987422,
-          "ci95_lo": 111.21693934333258,
-          "ci95_hi": 117.10610014763954,
-          "in_spec": true
+          "mean": 127.62016133646266,
+          "std": 1.5,
+          "ci95_lo": 124.68016133646266,
+          "ci95_hi": 130.56016133646267,
+          "in_spec": false
         },
         "Dissolution_30min_pct": {
-          "mean": 87.3275058400985,
-          "std": 0.3582933375854773,
-          "ci95_lo": 86.62525089843096,
-          "ci95_hi": 88.02976078176603,
-          "in_spec": true
+          "mean": 81.78339476400176,
+          "std": 0.8,
+          "ci95_lo": 80.21539476400176,
+          "ci95_hi": 83.35139476400175,
+          "in_spec": false
         },
         "Friability_pct": {
-          "mean": 0.24245890599873227,
-          "std": 0.256922069357553,
-          "ci95_lo": -0.2611083499420716,
-          "ci95_hi": 0.7460261619395361,
+          "mean": 0.6881791016866868,
+          "std": 0.05,
+          "ci95_lo": 0.5901791016866869,
+          "ci95_hi": 0.7861791016866868,
           "in_spec": true
         },
         "Uniformity_RSD_pct": {
-          "mean": 1.2343852980001688,
-          "std": 1.2855864120073681,
-          "ci95_lo": -1.2853640695342727,
-          "ci95_hi": 3.75413466553461,
+          "mean": 0.40083086470326634,
+          "std": 0.2,
+          "ci95_lo": 0.008830864703266328,
+          "ci95_hi": 0.7928308647032664,
           "in_spec": true
         }
       }
@@ -586,548 +596,57 @@
     {
       "solution_id": 12,
       "cpps": {
-        "Lactose_monohydrate_pct": 39.75583229534563,
-        "Starch_1500_pct": 31.034223591837584,
-        "DCPA_pct": 45.5,
-        "MCC_PH101_pct": 37.70219974091695,
-        "PEG_6000_pct": 5.0,
-        "TBC_pct": 12.562528084542972,
-        "HPC_LF_pct": 30.0,
-        "PEG_4000_pct": 20.010719119695835,
-        "TEC_pct": 11.496175271273462,
-        "Mannitol_pct": 33.77502572335724,
-        "Granulation_Moisture_pct": 3.0,
-        "Drying_Temperature_C": 72.49068729287008,
-        "Compression_Force_kN": 25.0,
-        "Batch_Scale_kg": 23.564823089103605,
-        "Impeller_Speed_rpm": 150.0,
-        "Blade_Speed_rpm": 241.14346794793715,
-        "Scale_Factor": 1.0
+        "binder_pct": 2.9817988856728013,
+        "Granulation_Moisture_pct": 6.773584294304402,
+        "Drying_Temperature_C": 72.21527828447111,
+        "Compression_Force_kN": 23.816306676274767,
+        "spray_rate_g_min": 13.901580301958212,
+        "Batch_Scale_kg": 5.15411993844858,
+        "Impeller_Speed_rpm": 175.97057481199724,
+        "Blade_Speed_rpm": 419.82228478701086,
+        "Scale_Factor": 6.0295648488054265,
+        "Lactose_monohydrate_pct": 19.395641119234014,
+        "Starch_1500_pct": 7.111043293345565,
+        "DCPA_pct": 6.830263027352971,
+        "MCC_PH101_pct": 10.752282848776229,
+        "PEG_6000_pct": 1.5471769933326625,
+        "HPC_LF_pct": 2.015795306746429
       },
       "cqa_predicted": {
         "Hardness_N": {
-          "mean": 140.8444339020433,
-          "std": 1.4134415568098242,
-          "ci95_lo": 138.07408845069605,
-          "ci95_hi": 143.61477935339056,
+          "mean": 116.15666835040872,
+          "std": 1.5,
+          "ci95_lo": 113.21666835040872,
+          "ci95_hi": 119.09666835040872,
+          "in_spec": true
+        },
+        "Dissolution_30min_pct": {
+          "mean": 86.48217920141636,
+          "std": 0.8,
+          "ci95_lo": 84.91417920141636,
+          "ci95_hi": 88.05017920141636,
+          "in_spec": true
+        },
+        "Friability_pct": {
+          "mean": 1.0700730387538873,
+          "std": 0.05,
+          "ci95_lo": 0.9720730387538873,
+          "ci95_hi": 1.1680730387538873,
           "in_spec": false
         },
-        "Dissolution_30min_pct": {
-          "mean": 79.969797079629,
-          "std": 0.3582933379307253,
-          "ci95_lo": 79.26754213728478,
-          "ci95_hi": 80.67205202197323,
-          "in_spec": true
-        },
-        "Friability_pct": {
-          "mean": -0.389534745258013,
-          "std": 0.2569220693975425,
-          "ci95_lo": -0.8931020012771963,
-          "ci95_hi": 0.11403251076117027,
-          "in_spec": true
-        },
         "Uniformity_RSD_pct": {
-          "mean": -2.3043378834187918,
-          "std": 1.2855864120073683,
-          "ci95_lo": -4.824087250953234,
-          "ci95_hi": 0.21541148411565025,
-          "in_spec": true
-        }
-      }
-    },
-    {
-      "solution_id": 13,
-      "cpps": {
-        "Lactose_monohydrate_pct": 41.85959635387878,
-        "Starch_1500_pct": 34.34733160674996,
-        "DCPA_pct": 43.32587209948878,
-        "MCC_PH101_pct": 38.50064361415233,
-        "PEG_6000_pct": 25.0,
-        "TBC_pct": 19.52761341537527,
-        "HPC_LF_pct": 30.0,
-        "PEG_4000_pct": 20.319476515662533,
-        "TEC_pct": 13.14359857945466,
-        "Mannitol_pct": 42.22637667687181,
-        "Granulation_Moisture_pct": 7.0,
-        "Drying_Temperature_C": 87.94253380605599,
-        "Compression_Force_kN": 8.0,
-        "Batch_Scale_kg": 43.945949076855875,
-        "Impeller_Speed_rpm": 500.0,
-        "Blade_Speed_rpm": 318.16205661615606,
-        "Scale_Factor": 1.0
-      },
-      "cqa_predicted": {
-        "Hardness_N": {
-          "mean": 87.27311582559224,
-          "std": 1.476288173143617,
-          "ci95_lo": 84.37959100623075,
-          "ci95_hi": 90.16664064495373,
-          "in_spec": true
-        },
-        "Dissolution_30min_pct": {
-          "mean": 99.17022077407043,
-          "std": 0.35829333639460725,
-          "ci95_lo": 98.467965834737,
-          "ci95_hi": 99.87247571340386,
-          "in_spec": true
-        },
-        "Friability_pct": {
-          "mean": -0.5070123505867856,
-          "std": 0.256922069261249,
-          "ci95_lo": -1.0105796063388337,
-          "ci95_hi": -0.0034450948347376498,
-          "in_spec": true
-        },
-        "Uniformity_RSD_pct": {
-          "mean": -0.9613517521323848,
-          "std": 1.2855864120073135,
-          "ci95_lo": -3.4811011196667194,
-          "ci95_hi": 1.5583976154019497,
-          "in_spec": true
-        }
-      }
-    },
-    {
-      "solution_id": 14,
-      "cpps": {
-        "Lactose_monohydrate_pct": 45.5,
-        "Starch_1500_pct": 30.0,
-        "DCPA_pct": 31.53973151644005,
-        "MCC_PH101_pct": 31.996132446371067,
-        "PEG_6000_pct": 5.0,
-        "TBC_pct": 5.0,
-        "HPC_LF_pct": 33.83118404009253,
-        "PEG_4000_pct": 21.0,
-        "TEC_pct": 7.651775243512104,
-        "Mannitol_pct": 42.36313185945747,
-        "Granulation_Moisture_pct": 7.0,
-        "Drying_Temperature_C": 92.82868933625119,
-        "Compression_Force_kN": 21.348100432589472,
-        "Batch_Scale_kg": 56.17464089811142,
-        "Impeller_Speed_rpm": 176.5908304155373,
-        "Blade_Speed_rpm": 150.0,
-        "Scale_Factor": 1.0
-      },
-      "cqa_predicted": {
-        "Hardness_N": {
-          "mean": 134.36107149541309,
-          "std": 1.4128415372958842,
-          "ci95_lo": 131.59190208231314,
-          "ci95_hi": 137.13024090851303,
-          "in_spec": false
-        },
-        "Dissolution_30min_pct": {
-          "mean": 91.13768918903047,
-          "std": 0.35829333782844663,
-          "ci95_lo": 90.43543424688671,
-          "ci95_hi": 91.83994413117422,
-          "in_spec": true
-        },
-        "Friability_pct": {
-          "mean": 0.018906609684917947,
-          "std": 0.25692206939080786,
-          "ci95_lo": -0.4846606463210654,
-          "ci95_hi": 0.5224738656909014,
-          "in_spec": true
-        },
-        "Uniformity_RSD_pct": {
-          "mean": 1.3399544637441727,
-          "std": 1.2855864120073683,
-          "ci95_lo": -1.1797949037902693,
-          "ci95_hi": 3.8597038312786145,
-          "in_spec": true
-        }
-      }
-    },
-    {
-      "solution_id": 15,
-      "cpps": {
-        "Lactose_monohydrate_pct": 45.5,
-        "Starch_1500_pct": 30.0,
-        "DCPA_pct": 30.0,
-        "MCC_PH101_pct": 30.0,
-        "PEG_6000_pct": 5.0,
-        "TBC_pct": 5.0,
-        "HPC_LF_pct": 30.0,
-        "PEG_4000_pct": 6.530692076724511,
-        "TEC_pct": 5.0,
-        "Mannitol_pct": 45.5,
-        "Granulation_Moisture_pct": 3.0,
-        "Drying_Temperature_C": 100.0,
-        "Compression_Force_kN": 25.0,
-        "Batch_Scale_kg": 1.0,
-        "Impeller_Speed_rpm": 150.0,
-        "Blade_Speed_rpm": 150.0,
-        "Scale_Factor": 1.0
-      },
-      "cqa_predicted": {
-        "Hardness_N": {
-          "mean": 147.24428418888488,
-          "std": 1.6031253640984349,
-          "ci95_lo": 144.10215847525194,
-          "ci95_hi": 150.3864099025178,
-          "in_spec": false
-        },
-        "Dissolution_30min_pct": {
-          "mean": 86.6981844268423,
-          "std": 0.35829333795298185,
-          "ci95_lo": 85.99592948445446,
-          "ci95_hi": 87.40043936923014,
-          "in_spec": true
-        },
-        "Friability_pct": {
-          "mean": -0.33560148674039736,
-          "std": 0.25692206939823253,
-          "ci95_lo": -0.8391687427609331,
-          "ci95_hi": 0.1679657692801384,
-          "in_spec": true
-        },
-        "Uniformity_RSD_pct": {
-          "mean": -2.3435378991805553,
-          "std": 1.2855864120073683,
-          "ci95_lo": -4.863287266714997,
-          "ci95_hi": 0.17621146835388668,
-          "in_spec": true
-        }
-      }
-    },
-    {
-      "solution_id": 16,
-      "cpps": {
-        "Lactose_monohydrate_pct": 45.5,
-        "Starch_1500_pct": 35.563448574800496,
-        "DCPA_pct": 34.90233181721893,
-        "MCC_PH101_pct": 37.8591277347783,
-        "PEG_6000_pct": 25.0,
-        "TBC_pct": 22.0,
-        "HPC_LF_pct": 45.5,
-        "PEG_4000_pct": 21.0,
-        "TEC_pct": 18.0,
-        "Mannitol_pct": 45.5,
-        "Granulation_Moisture_pct": 6.000063828697799,
-        "Drying_Temperature_C": 98.82624195858813,
-        "Compression_Force_kN": 15.820982562017194,
-        "Batch_Scale_kg": 61.94501657556653,
-        "Impeller_Speed_rpm": 500.0,
-        "Blade_Speed_rpm": 357.02536973762045,
-        "Scale_Factor": 6.449325592119261
-      },
-      "cqa_predicted": {
-        "Hardness_N": {
-          "mean": 111.24295341210465,
-          "std": 1.605280421413918,
-          "ci95_lo": 108.09660378613337,
-          "ci95_hi": 114.38930303807594,
-          "in_spec": true
-        },
-        "Dissolution_30min_pct": {
-          "mean": 97.73594109629113,
-          "std": 0.3582933379037313,
-          "ci95_lo": 97.03368615399981,
-          "ci95_hi": 98.43819603858245,
-          "in_spec": true
-        },
-        "Friability_pct": {
-          "mean": 0.25787351143242626,
-          "std": 0.25692206939881457,
-          "ci95_lo": -0.24569374458925025,
-          "ci95_hi": 0.7614407674541028,
-          "in_spec": true
-        },
-        "Uniformity_RSD_pct": {
-          "mean": 0.45852363869194623,
-          "std": 1.2855864120073681,
-          "ci95_lo": -2.061225728842495,
-          "ci95_hi": 2.978273006226388,
+          "mean": 1.4865044144843296,
+          "std": 0.2,
+          "ci95_lo": 1.0945044144843297,
+          "ci95_hi": 1.8785044144843295,
           "in_spec": true
         }
       }
     }
   ],
-  "proven_acceptable_ranges": {
-    "Lactose_monohydrate_pct": {
-      "mean": 39.23326988035595,
-      "std": 5.580995298133282,
-      "ci95_lo": 28.294519096014717,
-      "ci95_hi": 50.17202066469718,
-      "unit": "%"
-    },
-    "Starch_1500_pct": {
-      "mean": 33.06715920874648,
-      "std": 3.187780599651335,
-      "ci95_lo": 26.819109233429867,
-      "ci95_hi": 39.3152091840631,
-      "unit": "%"
-    },
-    "DCPA_pct": {
-      "mean": 36.650289000288126,
-      "std": 5.284681059343917,
-      "ci95_lo": 26.292314123974048,
-      "ci95_hi": 47.0082638766022,
-      "unit": "%"
-    },
-    "MCC_PH101_pct": {
-      "mean": 37.65140342355153,
-      "std": 4.512021324113159,
-      "ci95_lo": 28.807841628289736,
-      "ci95_hi": 46.49496521881332,
-      "unit": "%"
-    },
-    "PEG_6000_pct": {
-      "mean": 12.102234023958115,
-      "std": 7.670565633432661,
-      "ci95_lo": -2.932074617569901,
-      "ci95_hi": 27.136542665486132,
-      "unit": "%"
-    },
-    "TBC_pct": {
-      "mean": 12.057857771586812,
-      "std": 5.904113579527085,
-      "ci95_lo": 0.4857951557137259,
-      "ci95_hi": 23.629920387459897,
-      "unit": "%"
-    },
-    "HPC_LF_pct": {
-      "mean": 37.391098701064976,
-      "std": 5.6777791038365315,
-      "ci95_lo": 26.262651657545376,
-      "ci95_hi": 48.519545744584576,
-      "unit": "%"
-    },
-    "PEG_4000_pct": {
-      "mean": 13.645209449447572,
-      "std": 5.5443649840652105,
-      "ci95_lo": 2.77825408067976,
-      "ci95_hi": 24.512164818215382,
-      "unit": "%"
-    },
-    "TEC_pct": {
-      "mean": 11.234421853431742,
-      "std": 3.6459219209054967,
-      "ci95_lo": 4.088414888456969,
-      "ci95_hi": 18.380428818406514,
-      "unit": "%"
-    },
-    "Mannitol_pct": {
-      "mean": 39.667290046346494,
-      "std": 4.445688128016248,
-      "ci95_lo": 30.953741315434648,
-      "ci95_hi": 48.38083877725834,
-      "unit": "%"
-    },
-    "Granulation_Moisture_pct": {
-      "mean": 5.044189641811006,
-      "std": 1.6060243874151063,
-      "ci95_lo": 1.896381842477398,
-      "ci95_hi": 8.191997441144615,
-      "unit": "%"
-    },
-    "Drying_Temperature_C": {
-      "mean": 78.02051053691754,
-      "std": 14.623668514307886,
-      "ci95_lo": 49.35812024887409,
-      "ci95_hi": 106.682900824961,
-      "unit": "\u00b0C"
-    },
-    "Compression_Force_kN": {
-      "mean": 16.409847066608364,
-      "std": 6.002236717699496,
-      "ci95_lo": 4.645463099917352,
-      "ci95_hi": 28.174231033299378,
-      "unit": "kN"
-    },
-    "Batch_Scale_kg": {
-      "mean": 45.45198586503684,
-      "std": 29.929478428262748,
-      "ci95_lo": -13.209791854358144,
-      "ci95_hi": 104.11376358443182,
-      "unit": "kg"
-    },
-    "Impeller_Speed_rpm": {
-      "mean": 294.2341676759477,
-      "std": 130.19305236658326,
-      "ci95_lo": 39.05578503744448,
-      "ci95_hi": 549.4125503144509,
-      "unit": "rpm"
-    },
-    "Blade_Speed_rpm": {
-      "mean": 278.54711570322945,
-      "std": 115.12535022838655,
-      "ci95_lo": 52.90142925559181,
-      "ci95_hi": 504.1928021508671,
-      "unit": "rpm"
-    },
-    "Scale_Factor": {
-      "mean": 6.4160401484650915,
-      "std": 6.429299911736552,
-      "ci95_lo": -6.18538767853855,
-      "ci95_hi": 19.017467975468733,
-      "unit": "dimensionless"
-    }
-  },
-  "sensitivity_indices": {
-    "Hardness_N": {
-      "Lactose_monohydrate_pct": 0.12855731986342664,
-      "Starch_1500_pct": 0.024691837111148095,
-      "DCPA_pct": 0.01413690704000546,
-      "MCC_PH101_pct": 0.008332811425043158,
-      "PEG_6000_pct": 0.013528156234527248,
-      "TBC_pct": 0.013184747224515332,
-      "HPC_LF_pct": 0.010967546514637909,
-      "PEG_4000_pct": 0.00681395298037073,
-      "TEC_pct": 0.011855363129462403,
-      "Mannitol_pct": 0.04860567587424635,
-      "Granulation_Moisture_pct": 0.05080361307985942,
-      "Drying_Temperature_C": 0.01611396288652503,
-      "Compression_Force_kN": 0.21973404756029907,
-      "Batch_Scale_kg": 0.00858700022512249,
-      "Impeller_Speed_rpm": 0.10467668569012596,
-      "Blade_Speed_rpm": 0.012262425655925027,
-      "Scale_Factor": 0.011594813074856058
-    },
-    "Dissolution_30min_pct": {
-      "Lactose_monohydrate_pct": 1.4422380286802243,
-      "Starch_1500_pct": 1.4416909715207682,
-      "DCPA_pct": 1.4421438091643541,
-      "MCC_PH101_pct": 1.4418303479650123,
-      "PEG_6000_pct": 1.4426133092133622,
-      "TBC_pct": 1.442523495733784,
-      "HPC_LF_pct": 1.4411660691278676,
-      "PEG_4000_pct": 1.4424130728695974,
-      "TEC_pct": 1.441994790049077,
-      "Mannitol_pct": 1.4425823958820159,
-      "Granulation_Moisture_pct": 1.441960194063153,
-      "Drying_Temperature_C": 1.4422540144558078,
-      "Compression_Force_kN": 1.4421118478207013,
-      "Batch_Scale_kg": 1.4410304977389956,
-      "Impeller_Speed_rpm": 1.4412570261015725,
-      "Blade_Speed_rpm": 1.4421503090793937,
-      "Scale_Factor": 1.4422852636116534
-    },
-    "Friability_pct": {
-      "Lactose_monohydrate_pct": 1.6425117837809609,
-      "Starch_1500_pct": 2.0382784196220385,
-      "DCPA_pct": 1.7449582783174389,
-      "MCC_PH101_pct": 1.78866593118705,
-      "PEG_6000_pct": 2.1005325327385918,
-      "TBC_pct": 1.9942300636586656,
-      "HPC_LF_pct": 2.4558340666828964,
-      "PEG_4000_pct": 1.6182255927231595,
-      "TEC_pct": 1.9708571889367212,
-      "Mannitol_pct": 2.3728595004318196,
-      "Granulation_Moisture_pct": 1.5865242604790644,
-      "Drying_Temperature_C": 2.1052015628729017,
-      "Compression_Force_kN": 2.3244003136678586,
-      "Batch_Scale_kg": 1.4392687386763128,
-      "Impeller_Speed_rpm": 2.0768386023925554,
-      "Blade_Speed_rpm": 1.5531774128208211,
-      "Scale_Factor": 1.9337314564727646
-    },
-    "Uniformity_RSD_pct": {
-      "Lactose_monohydrate_pct": 2.6316195863128193,
-      "Starch_1500_pct": 2.1871319613568563,
-      "DCPA_pct": 2.567433227290255,
-      "MCC_PH101_pct": 3.767026112027408,
-      "PEG_6000_pct": 2.0812557632764217,
-      "TBC_pct": 3.6229316582666162,
-      "HPC_LF_pct": 3.1049844479477033,
-      "PEG_4000_pct": 3.920032257802401,
-      "TEC_pct": 2.4074619097313064,
-      "Mannitol_pct": 2.954952982057226,
-      "Granulation_Moisture_pct": 1.7451142478084039,
-      "Drying_Temperature_C": 2.2751447664034234,
-      "Compression_Force_kN": 2.8329735238497853,
-      "Batch_Scale_kg": 3.04411197881108,
-      "Impeller_Speed_rpm": 2.1586461842266385,
-      "Blade_Speed_rpm": 1.936986031167315,
-      "Scale_Factor": 2.499359693366602
-    }
-  },
-  "cpp_bounds_used": {
-    "Lactose_monohydrate_pct": [
-      30.0,
-      45.5
-    ],
-    "Starch_1500_pct": [
-      30.0,
-      41.0
-    ],
-    "DCPA_pct": [
-      30.0,
-      45.5
-    ],
-    "MCC_PH101_pct": [
-      30.0,
-      45.5
-    ],
-    "PEG_6000_pct": [
-      5.0,
-      25.0
-    ],
-    "TBC_pct": [
-      5.0,
-      22.0
-    ],
-    "HPC_LF_pct": [
-      30.0,
-      45.5
-    ],
-    "PEG_4000_pct": [
-      5.0,
-      21.0
-    ],
-    "TEC_pct": [
-      5.0,
-      18.0
-    ],
-    "Mannitol_pct": [
-      30.0,
-      45.5
-    ],
-    "Granulation_Moisture_pct": [
-      3.0,
-      7.0
-    ],
-    "Drying_Temperature_C": [
-      55.0,
-      100.0
-    ],
-    "Compression_Force_kN": [
-      8.0,
-      25.0
-    ],
-    "Batch_Scale_kg": [
-      1.0,
-      100.0
-    ],
-    "Impeller_Speed_rpm": [
-      150.0,
-      500.0
-    ],
-    "Blade_Speed_rpm": [
-      150.0,
-      500.0
-    ],
-    "Scale_Factor": [
-      1.0,
-      20.0
-    ]
-  },
-  "ehvi_history": [
-    -103.92874901506306,
-    -103.93094305403172,
-    -103.76987881551369,
-    -103.88260136456987,
-    -103.75160960600644,
-    -103.67862265536921,
-    -103.1876127710463,
-    -103.69938930656258,
-    -103.60291714876163,
-    -103.70262743852965,
-    -103.60610503876916,
-    -103.62933699268022,
-    -103.48735460861478,
-    -103.44576393510025,
-    -103.49397023078954
-  ]
+  "cqa_specifications": {
+    "dissolution_30min_pct": 85.0,
+    "hardness_n_target": 100.0,
+    "friability_max_pct": 1.0
+  }
 }
