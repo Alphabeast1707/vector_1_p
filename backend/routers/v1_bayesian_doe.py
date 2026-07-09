@@ -101,5 +101,7 @@ def get_session_summary(session_id: str = "default"):
         "n_total_experiments": len(loop.history_X),
         "n_pareto_solutions": len(loop.pareto_solutions),
         "loo_cv_r2": loop.compute_loo_cv_r2(),
-        "converged": convergence["converged"]
+        "converged": convergence["converged"],
+        "hypervolume_history": loop.hypervolume_history,
+        "pareto_solutions": loop.pareto_solutions
     }
