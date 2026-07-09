@@ -50,10 +50,12 @@ This repository features a **Multi-Vector Architecture** accessible through a un
     ├── src/
     │   ├── App.jsx                 # Main application UI and multi-tab system layout
     │   └── components/
-    │         ├── Vector1/
-    │         │     └── ActiveLearningDashboard.jsx  # Active Learning interface with loop status & export
-    │         └── Vector2/
-    │               └── ScaleUpDashboard.jsx         # Physical Scale-Up digital twin simulator dashboard
+    │       ├── Vector1/
+    │       │   └── ActiveLearningDashboard.jsx # Active Learning interface with loop status & export
+    │       ├── Vector2/
+    │       │   └── ScaleUpDashboard.jsx        # Scale-Up digital twin simulator dashboard
+    │       └── Vector3/
+    │           └── RiskAuditDashboard.jsx      # Risk Audit & GMP failure mode dashboard
 ```
 
 ---
