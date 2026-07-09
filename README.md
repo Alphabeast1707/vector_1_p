@@ -118,15 +118,6 @@ View interactive REST API documentation at `http://localhost:8001/docs`.
 cd frontend/
 npm run dev
 ```
-
-### 3. Map SSH Ports from Your local Mac (MacBook Air to VM)
-Execute the secure SSH port-forwarding command inside your local Mac terminal:
-```bash
-gcloud compute ssh enformis-gpu-instance \
-  --zone=asia-south1-b \
-  --project=ultra-472304 \
-  -- -L 5173:localhost:5173 -L 8001:localhost:8001
-```
 Now explore the live interface in your Mac web browser:
 👉 **`http://localhost:5173/`**
 
