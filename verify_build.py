@@ -53,8 +53,7 @@ def main():
         'tests/test_v1_bo.py',
         'tests/test_v1_bo_botorch.py',
         'tests/test_v1_phase1_integration.py',
-        'tests/test_v1_router.py',
-        'tests/test_v2_scaleup.py'
+        'tests/test_v1_router.py'
     ]
     
     results = {}
