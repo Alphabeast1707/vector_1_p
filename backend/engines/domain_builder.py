@@ -43,8 +43,9 @@ def build_domain(profile: ProfileCard, strategy: StrategyCard) -> Domain:
     upper_temp = min(100.0, decomp - 15.0)
 
     if profile.solid_state_risk and profile.solid_state_risk.polymorphic_risk_tier == "high":
-        # Tighten further based on glass transition conversion
-        upper_temp = min(upper_temp, profile.thermal_limits.glass_transition_temp_c - 7.0)
+        # Assume transition limit from custom field or glass transition temp as fallback
+        conversion_temp = getattr(profile.thermal_limits, "polymorph_conversion_temp", None) or profile.thermal_limits.glass_transition_temp_c
+        upper_temp = min(upper_temp, conversion_temp - 7.0)
 
     for exc in strategy.excipients:
         if exc.excipient_tg_c is not None:
