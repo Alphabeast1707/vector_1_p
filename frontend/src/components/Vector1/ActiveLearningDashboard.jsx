@@ -221,25 +221,25 @@ export default function ActiveLearningDashboard() {
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <div>
-            <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">API Identity</label>
+            <label className="block text-sm text-slate-500 mb-1">API Name</label>
             <input 
               type="text" 
               value={apiName} 
               onChange={(e) => setApiName(e.target.value)} 
               disabled={sessionInitialized}
-              className="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-emerald-500"
+              className="w-full bg-black border border-slate-800 rounded p-2 text-sm text-white focus:outline-none focus:border-emerald-500"
               placeholder="API Reference"
             />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Thermal Limits (°C)</label>
+            <label className="block text-sm text-slate-500 mb-1">Transition/Polymorph Limit (°C)</label>
             <div className="flex space-x-2">
               <input 
                 type="number" 
                 value={tg} 
                 onChange={(e) => setTg(parseFloat(e.target.value))} 
                 disabled={sessionInitialized}
-                className="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-emerald-500"
+                className="w-full bg-black border border-slate-800 rounded p-2 text-sm text-white focus:outline-none focus:border-emerald-500"
                 placeholder="Tg"
               />
               <input 
@@ -247,20 +247,20 @@ export default function ActiveLearningDashboard() {
                 value={decomp} 
                 onChange={(e) => setDecomp(parseFloat(e.target.value))} 
                 disabled={sessionInitialized}
-                className="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-emerald-500"
+                className="w-full bg-black border border-slate-800 rounded p-2 text-sm text-white focus:outline-none focus:border-emerald-500"
                 placeholder="Decomp"
               />
             </div>
           </div>
           <div>
-            <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">MCC Concentration Limits (%)</label>
+            <label className="block text-sm text-slate-500 mb-1">Excipient Bounds (MCC) (%)</label>
             <div className="flex space-x-2">
               <input 
                 type="number" 
                 value={mccMin} 
                 onChange={(e) => setMccMin(parseFloat(e.target.value))} 
                 disabled={sessionInitialized}
-                className="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-emerald-500"
+                className="w-full bg-black border border-slate-800 rounded p-2 text-sm text-white focus:outline-none focus:border-emerald-500"
                 placeholder="Min %"
               />
               <input 
@@ -268,32 +268,32 @@ export default function ActiveLearningDashboard() {
                 value={mccMax} 
                 onChange={(e) => setMccMax(parseFloat(e.target.value))} 
                 disabled={sessionInitialized}
-                className="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-emerald-500"
+                className="w-full bg-black border border-slate-800 rounded p-2 text-sm text-white focus:outline-none focus:border-emerald-500"
                 placeholder="Max %"
               />
             </div>
           </div>
           <div>
-            <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Target Objectives</label>
+            <label className="block text-sm text-slate-500 mb-1">Target Objectives</label>
             <div className="flex space-x-2 items-center">
               <input 
                 type="number" 
                 value={targetDiss} 
                 onChange={(e) => setTargetDiss(parseFloat(e.target.value))} 
                 disabled={sessionInitialized}
-                className="w-20 bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-emerald-500"
+                className="w-20 bg-black border border-slate-800 rounded p-2 text-sm text-white focus:outline-none focus:border-emerald-500 font-mono"
                 placeholder="Diss %"
               />
-              <span className="text-xs text-slate-400">%</span>
+              <span className="text-xs text-slate-500">%</span>
               <input 
                 type="number" 
                 value={targetHardness} 
                 onChange={(e) => setTargetHardness(parseFloat(e.target.value))} 
                 disabled={sessionInitialized}
-                className="w-20 bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-emerald-500"
+                className="w-20 bg-black border border-slate-800 rounded p-2 text-sm text-white focus:outline-none focus:border-emerald-500 font-mono"
                 placeholder="Hard kP"
               />
-              <span className="text-xs text-slate-400">kP</span>
+              <span className="text-xs text-slate-500">kP</span>
             </div>
           </div>
         </div>
