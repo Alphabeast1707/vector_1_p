@@ -15,7 +15,7 @@ def initialize_domain(profile: ProfileCard, strategy: StrategyCard, session_id: 
     Initializes the search space and returns 3 initial seed experiments (LHS).
     """
     domain = build_domain(profile, strategy)
-    active_loops[session_id] = ActiveLearningLoop(domain, strategy)
+    active_loops[session_id] = ActiveLearningLoop(domain, strategy, profile=profile)
     
     # Suggest 3 initial points
     suggestions = [active_loops[session_id].suggest_next() for _ in range(3)]
@@ -101,6 +101,7 @@ def get_session_summary(session_id: str = "default"):
         "n_total_experiments": len(loop.history_X),
         "n_pareto_solutions": len(loop.pareto_solutions),
         "loo_cv_r2": loop.compute_loo_cv_r2(),
+        "loo_cv_calibration": loop.evaluate_surrogate_calibration(),
         "converged": convergence["converged"],
         "hypervolume_history": loop.hypervolume_history,
         "pareto_solutions": loop.pareto_solutions
