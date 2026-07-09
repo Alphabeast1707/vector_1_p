@@ -11,6 +11,19 @@ export default function ActiveLearningDashboard() {
   const [paretoData, setParetoData] = useState([]);
   const [bestParams, setBestParams] = useState(null);
   const [error, setError] = useState(null);
+  const [convergenceStatus, setConvergenceStatus] = useState(null);
+
+  const fetchConvergence = async () => {
+    try {
+      const res = await fetch(`${BACKEND_BASE}/v1/convergence`);
+      if (res.ok) {
+        const data = await res.json();
+        setConvergenceStatus(data);
+      }
+    } catch (err) {
+      console.error("Failed to fetch convergence status:", err);
+    }
+  };
 
   // List of active suggested runs: each { id, params: {...}, results: { diss_q15, diss_q30, diss_q45, diss_q60, hardness_n, friability, cu, heckel }, submitted: false }
   const [suggestedRuns, setSuggestedRuns] = useState([]);
@@ -31,6 +44,7 @@ export default function ActiveLearningDashboard() {
     setBestParams(null);
     setSuggestedRuns([]);
     setSessionInitialized(false);
+    setConvergenceStatus(null);
 
     const profile = {
       api_name: apiName,
@@ -137,6 +151,7 @@ export default function ActiveLearningDashboard() {
           hardness: hardVal
         }
       ]);
+      fetchConvergence();
     } catch (err) {
       setError(err.message);
     }
@@ -172,6 +187,7 @@ export default function ActiveLearningDashboard() {
           dryingTemp: nextSuggestion.drying_temp_c ? nextSuggestion.drying_temp_c.toFixed(1) : "55.0"
         });
       }
+      fetchConvergence();
     } catch (err) {
       setError(err.message);
     } finally {
@@ -468,6 +484,45 @@ export default function ActiveLearningDashboard() {
           </div>
 
           <div className="space-y-6">
+            {convergenceStatus && (
+              <div className="bg-slate-800 p-6 rounded-xl border border-slate-700">
+                <h3 className="font-semibold text-slate-200 mb-3 flex items-center">
+                  <CheckCircle className="text-emerald-500 mr-2" size={18} />
+                  Active Loop Status
+                </h3>
+                {convergenceStatus.converged ? (
+                  <div className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 p-4 rounded-lg text-sm mb-4">
+                    ✅ Optimization Converged — {convergenceStatus.total_experiments} experiments used
+                  </div>
+                ) : (
+                  <div className="bg-blue-500/10 border border-blue-500/20 text-blue-400 p-4 rounded-lg text-sm mb-4">
+                    🔄 Optimizing — Loop continues ({suggestedRuns.length} runs active)
+                  </div>
+                )}
+                
+                <button 
+                  onClick={async () => {
+                    try {
+                      const res = await fetch(`${BACKEND_BASE}/v1/summary`);
+                      if (!res.ok) throw new Error("Failed to export summary");
+                      const data = await res.json();
+                      const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+                      const url = URL.createObjectURL(blob);
+                      const a = document.createElement('a');
+                      a.href = url;
+                      a.download = 'phase1_output.json';
+                      a.click();
+                    } catch (e) {
+                      setError(e.message);
+                    }
+                  }}
+                  className="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-900 font-bold py-2 rounded text-center text-sm transition-all shadow-[0_0_15px_rgba(16,185,129,0.2)]"
+                >
+                  Export Phase 1 Results (JSON)
+                </button>
+              </div>
+            )}
+
             <div className="bg-slate-800 p-6 rounded-xl border border-slate-700">
               <h3 className="font-semibold text-slate-200 mb-3 flex items-center">
                 <CheckCircle className="text-emerald-500 mr-2" size={18} />
