@@ -3,6 +3,10 @@ from schemas.shared_db_schemas import ProfileCard, StrategyCard
 from engines.domain_builder import build_domain
 from engines.bo_loop import ActiveLearningLoop
 
+import numpy as np
+from engines.dissolution_weibull import fit_weibull_profile
+from engines.scaleup_physics import compute_scaleup_metrics
+
 router = APIRouter(prefix="/v1", tags=["Vector 1 - DoE"])
 
 # In a real app, this would be persisted in PostgreSQL or Redis.
@@ -94,8 +98,36 @@ def get_session_summary(session_id: str = "default"):
         raise HTTPException(status_code=400, detail="Session not found")
     loop = active_loops[session_id]
     convergence = loop.check_convergence()
+    
+    # Compute average Weibull profile for the current Pareto-optimal solutions
+    weibull_data = []
+    times = np.array([15.0, 30.0, 45.0, 60.0])
+    for solution in loop.pareto_solutions:
+        # Extract dissolution points (first 4 elements of y)
+        y_vals = np.array([
+            solution["y"][0], # q15
+            solution["y"][1], # q30
+            solution["y"][2], # q45
+            solution["y"][3]  # q60
+        ])
+        eta, beta, r_sq = fit_weibull_profile(times, y_vals)
+        weibull_data.append({
+            "solution_id": solution.get("id", "unknown"),
+            "eta_scale": eta,
+            "beta_shape": beta,
+            "r_squared": r_sq
+        })
+
+    # Compute Scaleup metrics for default scale (5.0 scale-up factor)
+    # Extract impeller speed (default to 300 RPM)
+    scaleup_data = compute_scaleup_metrics(
+        impeller_speed_rpm=300.0,
+        impeller_diameter_m=0.1,
+        scale_factor=5.0
+    )
+    
     return {
-        "schema_version": "1.0",
+        "schema_version": "1.1",
         "api_name": loop.domain.api_name if hasattr(loop.domain, 'api_name') else "unknown",
         "n_seed_experiments": loop.seed_count,
         "n_total_experiments": len(loop.history_X),
@@ -104,5 +136,9 @@ def get_session_summary(session_id: str = "default"):
         "loo_cv_calibration": loop.evaluate_surrogate_calibration(),
         "converged": convergence["converged"],
         "hypervolume_history": loop.hypervolume_history,
-        "pareto_solutions": loop.pareto_solutions
+        "pareto_solutions": loop.pareto_solutions,
+        "analytical_horizons": {
+            "weibull_dissolution_fits": weibull_data,
+            "dimensionless_scaleup_metrics": scaleup_data
+        }
     }

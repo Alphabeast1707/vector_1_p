@@ -1,6 +1,6 @@
 import pytest
 from schemas.shared_db_schemas import ProfileCard, StrategyCard, ThermalLimits, PowderMetrics, Excipient, CQATargets
-from routers.v1_bayesian_doe import initialize_domain, add_result, suggest_next_experiment, active_loops
+from routers.v1_bayesian_doe import initialize_domain, add_result, suggest_next_experiment, get_session_summary, active_loops
 
 def test_v1_bayesian_doe_handlers():
     # 1. Setup request payload cards
@@ -77,6 +77,19 @@ def test_v1_bayesian_doe_handlers():
     assert "binder_pct" in suggestion
     assert "granulation_moisture_pct" in suggestion
     assert "Lactose_pct" in suggestion
+    
+    # 5. Call get_session_summary and verify the schema version is 1.1 and horizons block exists
+    summary_res = get_session_summary(session_id=session_id)
+    assert summary_res["schema_version"] == "1.1"
+    assert "analytical_horizons" in summary_res
+    horizons = summary_res["analytical_horizons"]
+    assert "weibull_dissolution_fits" in horizons
+    assert "dimensionless_scaleup_metrics" in horizons
+    
+    # Verify scale-up calculations
+    scaleup = horizons["dimensionless_scaleup_metrics"]
+    assert "froude_number_lab" in scaleup
+    assert "target_pilot_speed_rpm" in scaleup
     
     # Clean up
     active_loops.pop(session_id, None)
