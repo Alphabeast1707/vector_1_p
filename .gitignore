@@ -1,0 +1,27 @@
+# Virtual environment
+backend/venv
+venv/
+.venv/
+env/
+
+# Python caching
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDE / System
+.vscode/
+.idea/
+.DS_Store
+.ipynb_checkpoints/
+
+# Frontend Node / Vite
+frontend/node_modules/
+frontend/dist/
+
