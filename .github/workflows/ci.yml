@@ -55,21 +55,23 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -r backend/requirements.txt
           pip install pytest pytest-cov coverage
       
       - name: Run tests with coverage
         run: |
           pytest --cov=. --cov-report=xml --cov-report=html --cov-report=term
+        working-directory: backend
       
       - name: Check coverage threshold
         run: |
           coverage report --fail-under=60
+        working-directory: backend
       
       - name: Upload coverage reports
         uses: codecov/codecov-action@v3
         with:
-          files: ./coverage.xml
+          files: ./backend/coverage.xml
           flags: unittests
           name: codecov-umbrella
           fail_ci_if_error: false
@@ -79,7 +81,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: coverage-report
-          path: htmlcov/
+          path: backend/htmlcov/
 
   build:
     name: Build Project
@@ -97,7 +99,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -r backend/requirements.txt
           pip install build twine
       
       - name: Build distribution packages
