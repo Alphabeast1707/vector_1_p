@@ -4,9 +4,11 @@ try:
     from botorch.acquisition.multi_objective.logei import qLogNoisyExpectedHypervolumeImprovement
     from botorch.utils.multi_objective.box_decompositions.non_dominated import NondominatedPartitioning
     from botorch.models import SingleTaskGP
+    from botorch.sampling.normal import SobolQMCNormalSampler
     HAS_BOTORCH = True
 except ImportError:
     HAS_BOTORCH = False
+    SobolQMCNormalSampler = None
 
 def create_ehvi_acquisition(model, ref_point: list[float], train_Y: torch.Tensor):
     """
@@ -42,7 +44,7 @@ def create_log_nehvi_acquisition(model, ref_point: list[float], X_baseline: torc
         X_baseline = X_baseline[-4:]
         
     # Use a lightweight sampler (16 samples) to prevent CPU hypervolume partitioning from hanging on 8 objectives
-    from botorch.sampling.normal import SobolQMCNormalSampler
+    assert SobolQMCNormalSampler is not None
     sampler = SobolQMCNormalSampler(sample_shape=torch.Size([16]))
     
     acq_func = qLogNoisyExpectedHypervolumeImprovement(

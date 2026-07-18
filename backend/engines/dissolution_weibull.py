@@ -1,5 +1,8 @@
+import logging
 import numpy as np
 from scipy.optimize import curve_fit
+
+logger = logging.getLogger("vector_1.dissolution_weibull")
 
 def weibull_model(t, eta, beta):
     """Weibull cumulative dissolution equation: F(t) = 100 * (1 - exp(-(t/eta)^beta))"""
@@ -27,7 +30,8 @@ def fit_weibull_profile(times: np.ndarray, dissolution: np.ndarray) -> tuple[flo
         slope, intercept = np.polyfit(x, y, 1)
         beta_init = max(0.1, slope)
         eta_init = np.exp(-intercept / beta_init)
-    except Exception:
+    except Exception as e:
+        logger.warning(f"Linearized initialization of Weibull curve parameters failed: {e}. Falling back to default values.")
         beta_init = 1.0
         eta_init = 30.0
 
@@ -39,7 +43,8 @@ def fit_weibull_profile(times: np.ndarray, dissolution: np.ndarray) -> tuple[flo
             bounds=((1.0, 0.1), (180.0, 5.0))
         )
         eta_fit, beta_fit = popt
-    except Exception:
+    except Exception as e:
+        logger.warning(f"Non-linear Weibull curve fitting failed: {e}. Falling back to initial estimates.")
         eta_fit, beta_fit = eta_init, beta_init
         
     # Calculate R-squared

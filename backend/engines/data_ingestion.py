@@ -1,12 +1,15 @@
 import json
 import pandas as pd
-import numpy as np
+import json
+import logging
 from typing import List, Tuple
 from schemas.shared_db_schemas import (
-    ProfileCard, Excipient, ThermalLimits, PowderMetrics,
+    ProfileCard, ThermalLimits, PowderMetrics, Excipient,
     CorePhysicochemical, IonizationFractions, SolubilityProfile,
     PermeabilityProfile, SolidStateRisk, StabilityProfile
 )
+
+logger = logging.getLogger("vector_1.data_ingestion")
 
 def ingest_alpha_dataset(filepath: str) -> ProfileCard:
     """
@@ -41,7 +44,7 @@ def ingest_alpha_dataset(filepath: str) -> ProfileCard:
                     data = data[0]
                 api_name = data.get('api_name', 'Default API')
     except Exception as e:
-        print(f"Ingestion warning: using default parser fallback. Details: {str(e)}")
+        logger.warning(f"Ingestion warning: using default parser fallback. Details: {str(e)}")
         api_name = "Paracetamol-M3"
 
     profile = ProfileCard(

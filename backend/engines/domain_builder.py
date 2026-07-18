@@ -28,17 +28,11 @@ def build_domain(profile: ProfileCard, strategy: StrategyCard) -> Domain:
     # 1. Binder % Bounds (Fixed range)
     bounds_binder = (2.0, 6.0)
 
-    # 2. Granulation Moisture Bounds
+    # 2. Granulation Moisture Bounds Setup
     moisture_min = 3.0
     moisture_max = 7.0
 
-    for exc in strategy.excipients:
-        if exc.moisture_stability is not None and exc.moisture_stability < 0.5:
-            moisture_max = min(moisture_max, 5.5)  # Tighten upper bound
-        if exc.excipient_hydrophilicity is not None and exc.excipient_hydrophilicity > 0.8:
-            moisture_min = max(moisture_min, 4.0)  # Raise lower bound
-
-    # 3. Drying Temperature Bounds (Most complex)
+    # 3. Drying Temperature Bounds Setup
     decomp = profile.thermal_limits.decomposition_temp_c
     upper_temp = min(100.0, decomp - 15.0)
 
@@ -47,7 +41,12 @@ def build_domain(profile: ProfileCard, strategy: StrategyCard) -> Domain:
         conversion_temp = getattr(profile.thermal_limits, "polymorph_conversion_temp", None) or profile.thermal_limits.glass_transition_temp_c
         upper_temp = min(upper_temp, conversion_temp - 7.0)
 
+    # Consolidated excipient-dependent bounds checking
     for exc in strategy.excipients:
+        if exc.moisture_stability is not None and exc.moisture_stability < 0.5:
+            moisture_max = min(moisture_max, 5.5)  # Tighten upper bound
+        if exc.excipient_hydrophilicity is not None and exc.excipient_hydrophilicity > 0.8:
+            moisture_min = max(moisture_min, 4.0)  # Raise lower bound
         if exc.excipient_tg_c is not None:
             upper_temp = min(upper_temp, exc.excipient_tg_c - 5.0)
 

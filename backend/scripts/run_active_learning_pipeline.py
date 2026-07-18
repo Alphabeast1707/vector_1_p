@@ -12,8 +12,12 @@ import os
 import sys
 import argparse
 import json
+import logging
 import numpy as np
 import torch
+
+logging.basicConfig(level=logging.INFO, format="%(message)s")
+logger = logging.getLogger("vector_1.pipeline_runner")
 
 # Ensure the backend directory is in the import path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -122,14 +126,14 @@ def simulate_physical_experiment(suggestion: dict) -> list[float]:
 
 def run_pipeline(n_seeds: int = 8, n_rounds: int = 15, output_path: str = "data/phase1_output.json"):
     """Executes the complete production closed-loop pipeline autonomously."""
-    print("======================================================================")
-    print("      ENFORMIS ACTIVE LEARNING PIPELINE OPTIMIZATION ENGINE")
-    print("======================================================================")
-    print(f"  - Target API              : Paracetamol")
-    print(f"  - Seeding Phase (LHS)     : {n_seeds} experiments")
-    print(f"  - Optimization Phase (GP) : {n_rounds} rounds")
-    print(f"  - Export Destination      : {output_path}")
-    print("======================================================================")
+    logger.info("======================================================================")
+    logger.info("      ENFORMIS ACTIVE LEARNING PIPELINE OPTIMIZATION ENGINE")
+    logger.info("======================================================================")
+    logger.info(f"  - Target API              : Paracetamol")
+    logger.info(f"  - Seeding Phase (LHS)     : {n_seeds} experiments")
+    logger.info(f"  - Optimization Phase (GP) : {n_rounds} rounds")
+    logger.info(f"  - Export Destination      : {output_path}")
+    logger.info("======================================================================")
     
     profile = get_paracetamol_profile()
     strategy = get_default_strategy()
@@ -140,7 +144,7 @@ def run_pipeline(n_seeds: int = 8, n_rounds: int = 15, output_path: str = "data/
     
     # 2. LHS Seeding Phase
     # Generate 8 initial experiments to seed our Gaussian Process surrogates
-    print(f"\n[Step 1/3] Launching space-filling LHS Seeding ({n_seeds} points)...")
+    logger.info(f"\n[Step 1/3] Launching space-filling LHS Seeding ({n_seeds} points)...")
     for i in range(n_seeds):
         suggestion = loop.suggest_next()  # Generates initial LHS suggestions when loop is empty
         # Clean suggestion dictionary
@@ -155,12 +159,12 @@ def run_pipeline(n_seeds: int = 8, n_rounds: int = 15, output_path: str = "data/
             x_vals.append(float(suggestion_cleaned[inp.key]))
             
         loop.add_experiment_result(x_vals, y_out)
-        print(f"   ✓ Seed Experiment {i+1:02d}/{n_seeds:02d} ingested.")
+        logger.info(f"   ✓ Seed Experiment {i+1:02d}/{n_seeds:02d} ingested.")
         
     loop.seed_count = n_seeds
     
     # 3. Closed-Loop Bayesian Active Learning Phase
-    print(f"\n[Step 2/3] Initializing Bayesian Optimization ({n_rounds} rounds)...")
+    logger.info(f"\n[Step 2/3] Initializing Bayesian Optimization ({n_rounds} rounds)...")
     for r in range(n_rounds):
         # Programmatic suggestion via Multi-Objective BoTorch (qLogNEHVI) + Cost-Aware Scaling
         suggestion = loop.suggest_next()
@@ -175,10 +179,10 @@ def run_pipeline(n_seeds: int = 8, n_rounds: int = 15, output_path: str = "data/
             x_vals.append(float(suggestion_cleaned[inp.key]))
             
         loop.add_experiment_result(x_vals, y_out)
-        print(f"   ✓ Optimization Round {r+1:02d}/{n_rounds:02d} completed. Next coordinates calculated and validated.")
+        logger.info(f"   ✓ Optimization Round {r+1:02d}/{n_rounds:02d} completed. Next coordinates calculated and validated.")
         
     # 4. Calibration & Pareto Analysis
-    print("\n[Step 3/3] Performing Leave-One-Out Calibration & Pareto Front Sorting...")
+    logger.info("\n[Step 3/3] Performing Leave-One-Out Calibration & Pareto Front Sorting...")
     
     # Calculate analytical probabilistic scores (Gap 4 Elevated)
     calibration = loop.evaluate_surrogate_calibration()
@@ -274,11 +278,11 @@ def run_pipeline(n_seeds: int = 8, n_rounds: int = 15, output_path: str = "data/
     with open(output_path, "w") as f:
         json.dump(summary_payload, f, indent=2)
         
-    print(f"\n======================================================================")
-    print(f"✓ SUCCESS: Output file saved to: {output_path}")
-    print(f"  Generated {len(loop.history_X)} total multi-objective optimization trials.")
-    print(f"  Extracted {len(pareto_solutions)} pareto-optimal solutions.")
-    print(f"======================================================================")
+    logger.info(f"\n======================================================================")
+    logger.info(f"✓ SUCCESS: Output file saved to: {output_path}")
+    logger.info(f"  Generated {len(loop.history_X)} total multi-objective optimization trials.")
+    logger.info(f"  Extracted {len(pareto_solutions)} pareto-optimal solutions.")
+    logger.info(f"======================================================================")
 
 
 if __name__ == "__main__":

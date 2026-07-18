@@ -13,6 +13,11 @@ router = APIRouter(prefix="/v1", tags=["Vector 1 - DoE"])
 # We store it in memory for the prototype.
 active_loops = {}
 
+def _get_active_loop(session_id: str, detail: str = "Session not found") -> ActiveLearningLoop:
+    if session_id not in active_loops:
+        raise HTTPException(status_code=400, detail=detail)
+    return active_loops[session_id]
+
 @router.post("/domain")
 def initialize_domain(profile: ProfileCard, strategy: StrategyCard, session_id: str = "default"):
     """
@@ -30,10 +35,7 @@ def add_result(x_params: dict, y_results: dict, session_id: str = "default"):
     """
     Accepts physical lab results from the scientist.
     """
-    if session_id not in active_loops:
-        raise HTTPException(status_code=400, detail="Domain not initialized for this session")
-    
-    loop = active_loops[session_id]
+    loop = _get_active_loop(session_id, "Domain not initialized for this session")
     loop.add_experiment_result(list(x_params.values()), list(y_results.values()))
     return {"message": "Result added successfully"}
 
@@ -42,10 +44,7 @@ def suggest_next_experiment(session_id: str = "default"):
     """
     Suggests the single next best experiment using EHVI.
     """
-    if session_id not in active_loops:
-        raise HTTPException(status_code=400, detail="Domain not initialized for this session")
-    
-    loop = active_loops[session_id]
+    loop = _get_active_loop(session_id, "Domain not initialized for this session")
     suggestion = loop.suggest_next()
     return {"suggestion": suggestion}
 
@@ -54,9 +53,7 @@ def get_experiment_history(session_id: str = "default"):
     """
     Returns all experiments with CPP inputs and CQA outputs.
     """
-    if session_id not in active_loops:
-        raise HTTPException(status_code=400, detail="Session not found")
-    loop = active_loops[session_id]
+    loop = _get_active_loop(session_id, "Session not found")
     return {
         "n_experiments": len(loop.history_X),
         "experiments": [
@@ -70,9 +67,7 @@ def get_pareto_front(session_id: str = "default"):
     """
     Returns current Pareto-optimal solutions with CQA predictions.
     """
-    if session_id not in active_loops:
-        raise HTTPException(status_code=400, detail="Session not found")
-    loop = active_loops[session_id]
+    loop = _get_active_loop(session_id, "Session not found")
     return {
         "n_pareto": len(loop.pareto_solutions),
         "pareto_solutions": loop.pareto_solutions,
@@ -84,9 +79,7 @@ def check_convergence_status(session_id: str = "default"):
     """
     Checks whether the optimization loop has converged.
     """
-    if session_id not in active_loops:
-        raise HTTPException(status_code=400, detail="Session not found")
-    loop = active_loops[session_id]
+    loop = _get_active_loop(session_id, "Session not found")
     return loop.check_convergence()
 
 @router.get("/summary")
@@ -94,9 +87,7 @@ def get_session_summary(session_id: str = "default"):
     """
     Returns complete Phase 1 summary for export to Team Delta.
     """
-    if session_id not in active_loops:
-        raise HTTPException(status_code=400, detail="Session not found")
-    loop = active_loops[session_id]
+    loop = _get_active_loop(session_id, "Session not found")
     convergence = loop.check_convergence()
     
     # Compute average Weibull profile for the current Pareto-optimal solutions
