@@ -1,6 +1,3 @@
-# Backwards compatibility wrapper for EnFormis Vector 1 Database Schemas
-# Re-exports classes from individual files as requested by code review
-
 from schemas.ionization import IonizationFractions
 from schemas.solubility import SolubilityProfile
 from schemas.permeability import PermeabilityProfile

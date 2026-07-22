@@ -31,45 +31,55 @@ from engines.bo_loop import ActiveLearningLoop, compute_pareto_front
 
 def get_paracetamol_profile() -> ProfileCard:
     """Returns the production-grade physical/thermodynamic profile card for Paracetamol."""
-    return ProfileCard(
-        api_name="Paracetamol",
-        dose_number=0.3,  # represents drug loading metric (e.g., 30% API load)
-        thermal_limits=ThermalLimits(
-            glass_transition_temp_c=75.0,
-            decomposition_temp_c=247.7,
-            melting_point_c=169.0
-        ),
-        powder_metrics=PowderMetrics(
-            carrs_index=23.9,
-            hausner_ratio=1.2,
-            true_density_g_ml=1.3,
-            particle_size_d50_um=50.0
+    try:
+        profile = ProfileCard(
+            api_name="Paracetamol",
+            dose_number=0.3,  # represents drug loading metric (e.g., 30% API load)
+            thermal_limits=ThermalLimits(
+                glass_transition_temp_c=75.0,
+                decomposition_temp_c=247.7,
+                melting_point_c=169.0
+            ),
+            powder_metrics=PowderMetrics(
+                carrs_index=23.9,
+                hausner_ratio=1.2,
+                true_density_g_ml=1.3,
+                particle_size_d50_um=50.0
+            )
         )
-    )
+        return profile
+    except Exception as e:
+        logger.error(f"Error handling mechanism: Failed to create Paracetamol ProfileCard: {e}")
+        raise RuntimeError(f"Profile creation failed: {e}")
 
 
 def get_default_strategy() -> StrategyCard:
     """Returns the default high-performance strategy card for Phase 1 optimization."""
-    return StrategyCard(
-        excipients=[
-            Excipient(name="Lactose_monohydrate", role="filler", concentration_min_pct=10.0, concentration_max_pct=50.0),
-            Excipient(name="Starch_1500", role="filler", concentration_min_pct=5.0, concentration_max_pct=40.0),
-            Excipient(name="DCPA", role="filler", concentration_min_pct=5.0, concentration_max_pct=50.0),
-            Excipient(name="MCC_PH101", role="binder", concentration_min_pct=10.0, concentration_max_pct=40.0),
-            Excipient(name="PEG_6000", role="plasticizer", concentration_min_pct=1.0, concentration_max_pct=15.0),
-            Excipient(name="HPC_LF", role="binder", concentration_min_pct=1.0, concentration_max_pct=10.0),
-        ],
-        cqa_targets=CQATargets(
-            dissolution_q30_min_pct=85.0,
-            hardness_min_kp=6.0,
-            hardness_max_kp=12.0,
-            friability_max_pct=1.0,
-            content_uniformity_min_pct=95.0,
-            content_uniformity_max_pct=105.0,
-            heckel_slope_min=0.08,
-            heckel_slope_max=0.15
+    try:
+        strategy = StrategyCard(
+            excipients=[
+                Excipient(name="Lactose_monohydrate", role="filler", concentration_min_pct=10.0, concentration_max_pct=50.0),
+                Excipient(name="Starch_1500", role="filler", concentration_min_pct=5.0, concentration_max_pct=40.0),
+                Excipient(name="DCPA", role="filler", concentration_min_pct=5.0, concentration_max_pct=50.0),
+                Excipient(name="MCC_PH101", role="binder", concentration_min_pct=10.0, concentration_max_pct=40.0),
+                Excipient(name="PEG_6000", role="plasticizer", concentration_min_pct=1.0, concentration_max_pct=15.0),
+                Excipient(name="HPC_LF", role="binder", concentration_min_pct=1.0, concentration_max_pct=10.0),
+            ],
+            cqa_targets=CQATargets(
+                dissolution_q30_min_pct=85.0,
+                hardness_min_kp=6.0,
+                hardness_max_kp=12.0,
+                friability_max_pct=1.0,
+                content_uniformity_min_pct=95.0,
+                content_uniformity_max_pct=105.0,
+                heckel_slope_min=0.08,
+                heckel_slope_max=0.15
+            )
         )
-    )
+        return strategy
+    except Exception as e:
+        logger.error(f"Error handling mechanism: Failed to create default StrategyCard: {e}")
+        raise RuntimeError(f"Strategy creation failed: {e}")
 
 
 def simulate_physical_experiment(suggestion: dict) -> list[float]:
@@ -135,161 +145,199 @@ def run_pipeline(n_seeds: int = 8, n_rounds: int = 15, output_path: str = "data/
     logger.info(f"  - Export Destination      : {output_path}")
     logger.info("======================================================================")
     
-    profile = get_paracetamol_profile()
-    strategy = get_default_strategy()
+    try:
+        profile = get_paracetamol_profile()
+        strategy = get_default_strategy()
+    except Exception as e:
+        logger.error(f"Failed to create profile or strategy cards: {e}")
+        sys.exit(1)
     
     # 1. Build space-filling domain bounded by physicochemical limits
-    domain = build_domain(profile, strategy)
-    loop = ActiveLearningLoop(domain, strategy, profile=profile)
+    try:
+        domain = build_domain(profile, strategy)
+        logger.info("✓ Mathematical search space domain constructed successfully.")
+        
+        loop = ActiveLearningLoop(domain, strategy, profile=profile)
+        logger.info("✓ ActiveLearningLoop initialized successfully.")
+    except Exception as e:
+        logger.error(f"Error handling mechanism: Domain builder or Loop initialization failed: {e}")
+        sys.exit(1)
     
     # 2. LHS Seeding Phase
     # Generate 8 initial experiments to seed our Gaussian Process surrogates
     logger.info(f"\n[Step 1/3] Launching space-filling LHS Seeding ({n_seeds} points)...")
     for i in range(n_seeds):
-        suggestion = loop.suggest_next()  # Generates initial LHS suggestions when loop is empty
-        # Clean suggestion dictionary
-        suggestion_cleaned = {k: float(v) for k, v in suggestion.items() if k != "percolation_warning"}
-        
-        # Simulate physical compaction and test attributes
-        y_out = simulate_physical_experiment(suggestion_cleaned)
-        
-        # Ingest result into active loop history
-        x_vals = []
-        for inp in domain.inputs:
-            x_vals.append(float(suggestion_cleaned[inp.key]))
+        try:
+            suggestion = loop.suggest_next()  # Generates initial LHS suggestions when loop is empty
+            if not suggestion:
+                logger.error("Error handling mechanism: Seeding suggestion returned empty response.")
+                sys.exit(1)
+                
+            # Clean suggestion dictionary
+            suggestion_cleaned = {k: float(v) for k, v in suggestion.items() if k != "percolation_warning"}
             
-        loop.add_experiment_result(x_vals, y_out)
-        logger.info(f"   ✓ Seed Experiment {i+1:02d}/{n_seeds:02d} ingested.")
+            # Simulate physical compaction and test attributes
+            y_out = simulate_physical_experiment(suggestion_cleaned)
+            
+            # Ingest result into active loop history
+            x_vals = []
+            for inp in domain.inputs:
+                x_vals.append(float(suggestion_cleaned[inp.key]))
+                
+            loop.add_experiment_result(x_vals, y_out)
+            logger.info(f"   ✓ Seed Experiment {i+1:02d}/{n_seeds:02d} ingested.")
+        except Exception as e:
+            logger.error(f"Error handling mechanism: Failed during seed experiment iteration {i+1}: {e}")
+            sys.exit(1)
         
     loop.seed_count = n_seeds
     
     # 3. Closed-Loop Bayesian Active Learning Phase
     logger.info(f"\n[Step 2/3] Initializing Bayesian Optimization ({n_rounds} rounds)...")
     for r in range(n_rounds):
-        # Programmatic suggestion via Multi-Objective BoTorch (qLogNEHVI) + Cost-Aware Scaling
-        suggestion = loop.suggest_next()
-        suggestion_cleaned = {k: float(v) for k, v in suggestion.items() if k != "percolation_warning"}
-        
-        # Simulate formulation compacted trial
-        y_out = simulate_physical_experiment(suggestion_cleaned)
-        
-        # Ingest and fit the upgraded coregionalization surrogate
-        x_vals = []
-        for inp in domain.inputs:
-            x_vals.append(float(suggestion_cleaned[inp.key]))
+        try:
+            # Programmatic suggestion via Multi-Objective BoTorch (qLogNEHVI) + Cost-Aware Scaling
+            suggestion = loop.suggest_next()
+            if not suggestion:
+                logger.error("Error handling mechanism: Optimization suggestion returned empty response.")
+                sys.exit(1)
+                
+            suggestion_cleaned = {k: float(v) for k, v in suggestion.items() if k != "percolation_warning"}
             
-        loop.add_experiment_result(x_vals, y_out)
-        logger.info(f"   ✓ Optimization Round {r+1:02d}/{n_rounds:02d} completed. Next coordinates calculated and validated.")
+            # Simulate formulation compacted trial
+            y_out = simulate_physical_experiment(suggestion_cleaned)
+            
+            # Ingest and fit the upgraded coregionalization surrogate
+            x_vals = []
+            for inp in domain.inputs:
+                x_vals.append(float(suggestion_cleaned[inp.key]))
+                
+            loop.add_experiment_result(x_vals, y_out)
+            logger.info(f"   ✓ Optimization Round {r+1:02d}/{n_rounds:02d} completed. Next coordinates calculated and validated.")
+        except Exception as e:
+            logger.error(f"Error handling mechanism: Failed during active optimization round {r+1}: {e}")
+            sys.exit(1)
         
     # 4. Calibration & Pareto Analysis
     logger.info("\n[Step 3/3] Performing Leave-One-Out Calibration & Pareto Front Sorting...")
-    
-    # Calculate analytical probabilistic scores (Gap 4 Elevated)
-    calibration = loop.evaluate_surrogate_calibration()
-    
-    # Extract Pareto-optimal non-dominated solutions
-    history_X_np = np.array(loop.history_X)
-    history_Y_np = np.array(loop.history_Y)
-    
-    transformed_Y = loop._transform_objectives(history_Y_np)
-    pareto_indices = np.where(compute_pareto_front(transformed_Y))[0].tolist()
+    try:
+        # Calculate analytical probabilistic scores (Gap 4 Elevated)
+        calibration = loop.evaluate_surrogate_calibration()
+        
+        # Extract Pareto-optimal non-dominated solutions
+        history_X_np = np.array(loop.history_X)
+        history_Y_np = np.array(loop.history_Y)
+        
+        transformed_Y = loop._transform_objectives(history_Y_np)
+        pareto_indices = np.where(compute_pareto_front(transformed_Y))[0].tolist()
+    except Exception as e:
+        logger.error(f"Error handling mechanism: Failed during calibration/Pareto calculation: {e}")
+        sys.exit(1)
     
     # 5. Build and Export High-Fidelity Summary JSON
-    pareto_solutions = []
-    for count, idx_p in enumerate(pareto_indices):
-        x_orig = history_X_np[idx_p]
-        y_orig = history_Y_np[idx_p]
-        
-        cpps = {}
-        for idx_i, inp in enumerate(domain.inputs):
-            key = inp.key
-            # Map keys to expected casing in integration test to ensure backward compatibility and avoid flat gradients
-            if key == "granulation_moisture_pct":
-                cpps["Granulation_Moisture_pct"] = float(x_orig[idx_i])
-            elif key == "drying_temp_c":
-                cpps["Drying_Temperature_C"] = float(x_orig[idx_i])
-            elif key == "compression_force_kn":
-                cpps["Compression_Force_kN"] = float(x_orig[idx_i])
-            else:
-                cpps[key] = float(x_orig[idx_i])
+    try:
+        pareto_solutions = []
+        for count, idx_p in enumerate(pareto_indices):
+            x_orig = history_X_np[idx_p]
+            y_orig = history_Y_np[idx_p]
             
-        # Reconstruct simulated predictions / metrics matching standard output format
-        pareto_solutions.append({
-            "solution_id": count + 1,
-            "cpps": cpps,
-            "cqa_predicted": {
-                "Hardness_N": {
-                    "mean": float(y_orig[4]),
-                    "std": 1.5,
-                    "ci95_lo": float(y_orig[4] - 1.96 * 1.5),
-                    "ci95_hi": float(y_orig[4] + 1.96 * 1.5),
-                    "in_spec": bool(80.0 <= y_orig[4] <= 120.0)
-                },
-                "Dissolution_30min_pct": {
-                    "mean": float(y_orig[1]),
-                    "std": 0.8,
-                    "ci95_lo": float(y_orig[1] - 1.96 * 0.8),
-                    "ci95_hi": float(y_orig[1] + 1.96 * 0.8),
-                    "in_spec": bool(y_orig[1] >= 85.0)
-                },
-                "Friability_pct": {
-                    "mean": float(y_orig[5]),
-                    "std": 0.05,
-                    "ci95_lo": float(y_orig[5] - 1.96 * 0.05),
-                    "ci95_hi": float(y_orig[5] + 1.96 * 0.05),
-                    "in_spec": bool(y_orig[5] <= 1.0)
-                },
-                "Uniformity_RSD_pct": {
-                    "mean": float(100.0 - y_orig[6]),  # convert CU midpoint back to standard RSD proxy
-                    "std": 0.2,
-                    "ci95_lo": float((100.0 - y_orig[6]) - 1.96 * 0.2),
-                    "ci95_hi": float((100.0 - y_orig[6]) + 1.96 * 0.2),
-                    "in_spec": bool((100.0 - y_orig[6]) <= 3.0)
+            cpps = {}
+            for idx_i, inp in enumerate(domain.inputs):
+                key = inp.key
+                # Map keys to expected casing in integration test to ensure backward compatibility and avoid flat gradients
+                if key == "granulation_moisture_pct":
+                    cpps["Granulation_Moisture_pct"] = float(x_orig[idx_i])
+                elif key == "drying_temp_c":
+                    cpps["Drying_Temperature_C"] = float(x_orig[idx_i])
+                elif key == "compression_force_kn":
+                    cpps["Compression_Force_kN"] = float(x_orig[idx_i])
+                else:
+                    cpps[key] = float(x_orig[idx_i])
+                
+            # Reconstruct simulated predictions / metrics matching standard output format
+            pareto_solutions.append({
+                "solution_id": count + 1,
+                "cpps": cpps,
+                "cqa_predicted": {
+                    "Hardness_N": {
+                        "mean": float(y_orig[4]),
+                        "std": 1.5,
+                        "ci95_lo": float(y_orig[4] - 1.96 * 1.5),
+                        "ci95_hi": float(y_orig[4] + 1.96 * 1.5),
+                        "in_spec": bool(80.0 <= y_orig[4] <= 120.0)
+                    },
+                    "Dissolution_30min_pct": {
+                        "mean": float(y_orig[1]),
+                        "std": 0.8,
+                        "ci95_lo": float(y_orig[1] - 1.96 * 0.8),
+                        "ci95_hi": float(y_orig[1] + 1.96 * 0.8),
+                        "in_spec": bool(y_orig[1] >= 85.0)
+                    },
+                    "Friability_pct": {
+                        "mean": float(y_orig[5]),
+                        "std": 0.05,
+                        "ci95_lo": float(y_orig[5] - 1.96 * 0.05),
+                        "ci95_hi": float(y_orig[5] + 1.96 * 0.05),
+                        "in_spec": bool(y_orig[5] <= 1.0)
+                    },
+                    "Uniformity_RSD_pct": {
+                        "mean": float(100.0 - y_orig[6]),  # convert CU midpoint back to standard RSD proxy
+                        "std": 0.2,
+                        "ci95_lo": float((100.0 - y_orig[6]) - 1.96 * 0.2),
+                        "ci95_hi": float((100.0 - y_orig[6]) + 1.96 * 0.2),
+                        "in_spec": bool((100.0 - y_orig[6]) <= 3.0)
+                    }
                 }
+            })
+            
+        # Re-structure R2 and calibration mapping for legacy API compatibility
+        loo_cv_r2 = calibration["r2"].get("dissolution_q30", -0.168)
+        
+        summary_payload = {
+            "schema_version": "1.0",
+            "timestamp": "2026-07-09T21:00:00.000000",
+            "random_seed": 42,
+            "api_name": "Paracetamol",
+            "bcs_class": "I",
+            "primary_technique": "wet_granulation",
+            "technique_confidence": 0.699,
+            "n_seed_experiments": n_seeds,
+            "n_total_experiments": len(loop.history_X),
+            "n_pareto_solutions": len(pareto_solutions),
+            "loo_cv_r2": loo_cv_r2,
+            "loo_cv_calibration": calibration,
+            "pareto_solutions": pareto_solutions,
+            "cqa_specifications": {
+                "dissolution_30min_pct": 85.0,
+                "hardness_n_target": 100.0,
+                "friability_max_pct": 1.0
             }
-        })
-        
-    # Re-structure R2 and calibration mapping for legacy API compatibility
-    loo_cv_r2 = calibration["r2"].get("dissolution_q30", -0.168)
-    
-    summary_payload = {
-        "schema_version": "1.0",
-        "timestamp": "2026-07-09T21:00:00.000000",
-        "random_seed": 42,
-        "api_name": "Paracetamol",
-        "bcs_class": "I",
-        "primary_technique": "wet_granulation",
-        "technique_confidence": 0.699,
-        "n_seed_experiments": n_seeds,
-        "n_total_experiments": len(loop.history_X),
-        "n_pareto_solutions": len(pareto_solutions),
-        "loo_cv_r2": loo_cv_r2,
-        "loo_cv_calibration": calibration,
-        "pareto_solutions": pareto_solutions,
-        "cqa_specifications": {
-            "dissolution_30min_pct": 85.0,
-            "hardness_n_target": 100.0,
-            "friability_max_pct": 1.0
         }
-    }
-    
-    # Save directly to file
-    os.makedirs(os.path.dirname(output_path), exist_ok=True)
-    with open(output_path, "w") as f:
-        json.dump(summary_payload, f, indent=2)
         
-    logger.info(f"\n======================================================================")
-    logger.info(f"✓ SUCCESS: Output file saved to: {output_path}")
-    logger.info(f"  Generated {len(loop.history_X)} total multi-objective optimization trials.")
-    logger.info(f"  Extracted {len(pareto_solutions)} pareto-optimal solutions.")
-    logger.info(f"======================================================================")
+        # Save directly to file
+        os.makedirs(os.path.dirname(output_path), exist_ok=True)
+        with open(output_path, "w") as f:
+            json.dump(summary_payload, f, indent=2)
+            
+        logger.info(f"\n======================================================================")
+        logger.info(f"✓ SUCCESS: Output file saved to: {output_path}")
+        logger.info(f"  Generated {len(loop.history_X)} total multi-objective optimization trials.")
+        logger.info(f"  Extracted {len(pareto_solutions)} pareto-optimal solutions.")
+        logger.info(f"======================================================================")
+    except Exception as e:
+        logger.error(f"Error handling mechanism: Failed to export summary file to {output_path}: {e}")
+        sys.exit(1)
 
 
-if __name__ == "__main__":
+def parse_args():
+    """Separates parser definitions from the main execution block as requested by code review."""
     parser = argparse.ArgumentParser(description="Run EnFormis Vector 1 programmatical pipeline.")
     parser.add_argument("--seeds", type=int, default=8, help="Number of LHS seeds (default: 8)")
     parser.add_argument("--rounds", type=int, default=15, help="Number of active optimization rounds (default: 15)")
     parser.add_argument("--output", type=str, default="data/phase1_output.json", help="Path to write the output JSON summary")
-    
-    args = parser.parse_args()
+    return parser.parse_args()
+
+
+if __name__ == "__main__":
+    args = parse_args()
     run_pipeline(n_seeds=args.seeds, n_rounds=args.rounds, output_path=args.output)
