@@ -2,7 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { CheckCircle, AlertTriangle, Cpu } from 'lucide-react';
 
-const BACKEND_BASE = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_BACKEND_URL) || "http://localhost:8001";
+const BACKEND_BASE = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_BACKEND_URL) || 
+  ((typeof window !== 'undefined' && window.location) 
+    ? `${window.location.protocol}//${window.location.hostname}:8001`
+    : "http://localhost:8001");
 
 export default function ActiveLearningDashboard() {
   const [initializing, setInitializing] = useState(false);
