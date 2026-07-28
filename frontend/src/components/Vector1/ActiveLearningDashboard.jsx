@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { CheckCircle, AlertTriangle, Cpu } from 'lucide-react';
 
@@ -12,6 +12,35 @@ export default function ActiveLearningDashboard() {
   const [bestParams, setBestParams] = useState(null);
   const [error, setError] = useState(null);
   const [convergenceStatus, setConvergenceStatus] = useState(null);
+  const [presets, setPresets] = useState({});
+
+  useEffect(() => {
+    const fetchPresets = async () => {
+      try {
+        const res = await fetch(`${BACKEND_BASE}/v1/presets`);
+        if (res.ok) {
+          const data = await res.json();
+          setPresets(data);
+        }
+      } catch (err) {
+        console.error("Failed to fetch presets:", err);
+      }
+    };
+    fetchPresets();
+  }, []);
+
+  const handleApiChange = (value) => {
+    setApiName(value);
+    if (presets && presets[value]) {
+      const p = presets[value];
+      setTg(p.tg);
+      setDecomp(p.decomp);
+      setMccMin(p.mcc_min);
+      setMccMax(p.mcc_max);
+      setTargetDiss(p.target_diss);
+      setTargetHardness(p.target_hardness);
+    }
+  };
 
   const fetchConvergence = async () => {
     try {
@@ -221,7 +250,21 @@ export default function ActiveLearningDashboard() {
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <div>
-            <label className="block text-sm text-slate-500 mb-1">API Name</label>
+            <label className="block text-sm text-slate-500 mb-1">Select Preset API</label>
+            <select
+              onChange={(e) => {
+                if (e.target.value) handleApiChange(e.target.value);
+              }}
+              disabled={sessionInitialized}
+              className="w-full bg-black border border-slate-800 rounded p-2 text-sm text-white focus:outline-none focus:border-emerald-500 cursor-pointer mb-2"
+              defaultValue=""
+            >
+              <option value="" disabled>-- Choose Preset --</option>
+              {Object.keys(presets).map((name) => (
+                <option key={name} value={name}>{name}</option>
+              ))}
+            </select>
+            <label className="block text-xs text-slate-500 mb-1">Or Type Name</label>
             <input 
               type="text" 
               value={apiName} 

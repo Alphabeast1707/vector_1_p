@@ -272,3 +272,75 @@ def get_session_summary(session_id: str = "default"):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to generate summary card: {str(e)}"
         )
+
+@router.get("/presets")
+def get_api_presets():
+    """
+    Returns presets for common APIs to automatically populate characteristics.
+    """
+    return {
+        "Aspirin-300": {
+            "tg": 65.0,
+            "decomp": 120.0,
+            "mcc_min": 20.0,
+            "mcc_max": 50.0,
+            "target_diss": 80.0,
+            "target_hardness": 8.0
+        },
+        "Paracetamol": {
+            "tg": 58.0,
+            "decomp": 150.0,
+            "mcc_min": 15.0,
+            "mcc_max": 40.0,
+            "target_diss": 85.0,
+            "target_hardness": 9.0
+        },
+        "Ibuprofen": {
+            "tg": 20.0,
+            "decomp": 75.0,
+            "mcc_min": 10.0,
+            "mcc_max": 35.0,
+            "target_diss": 75.0,
+            "target_hardness": 6.5
+        },
+        "Indomethacin": {
+            "tg": 42.0,
+            "decomp": 120.0,
+            "mcc_min": 25.0,
+            "mcc_max": 60.0,
+            "target_diss": 80.0,
+            "target_hardness": 7.5
+        },
+        "Simvastatin": {
+            "tg": 45.0,
+            "decomp": 149.0,
+            "mcc_min": 20.0,
+            "mcc_max": 50.0,
+            "target_diss": 90.0,
+            "target_hardness": 10.0
+        },
+        "Celecoxib": {
+            "tg": 56.0,
+            "decomp": 207.0,
+            "mcc_min": 20.0,
+            "mcc_max": 50.0,
+            "target_diss": 80.0,
+            "target_hardness": 8.0
+        },
+        "Verapamil": {
+            "tg": 50.0,
+            "decomp": 140.0,
+            "mcc_min": 15.0,
+            "mcc_max": 45.0,
+            "target_diss": 85.0,
+            "target_hardness": 8.5
+        },
+        "Fenofibrate": {
+            "tg": 32.0,
+            "decomp": 181.0,
+            "mcc_min": 20.0,
+            "mcc_max": 50.0,
+            "target_diss": 75.0,
+            "target_hardness": 7.0
+        }
+    }
