@@ -13,6 +13,7 @@ export default function ActiveLearningDashboard() {
   const [error, setError] = useState(null);
   const [convergenceStatus, setConvergenceStatus] = useState(null);
   const [presets, setPresets] = useState({});
+  const [selectedApiDetails, setSelectedApiDetails] = useState(null);
 
   useEffect(() => {
     const fetchPresets = async () => {
@@ -21,6 +22,9 @@ export default function ActiveLearningDashboard() {
         if (res.ok) {
           const data = await res.json();
           setPresets(data);
+          if (data["Aspirin-300"]) {
+            setSelectedApiDetails(data["Aspirin-300"]);
+          }
         }
       } catch (err) {
         console.error("Failed to fetch presets:", err);
@@ -39,6 +43,9 @@ export default function ActiveLearningDashboard() {
       setMccMax(p.mcc_max);
       setTargetDiss(p.target_diss);
       setTargetHardness(p.target_hardness);
+      setSelectedApiDetails(p);
+    } else {
+      setSelectedApiDetails(null);
     }
   };
 
@@ -340,6 +347,17 @@ export default function ActiveLearningDashboard() {
             </div>
           </div>
         </div>
+        {selectedApiDetails && (
+          <div className="mt-6 p-4 bg-slate-900/60 rounded-lg border border-slate-700 flex flex-wrap gap-6 items-center text-xs">
+            <span className="text-emerald-400 font-semibold uppercase tracking-wider">Dynamic Database Specs:</span>
+            <div className="flex space-x-1"><span className="text-slate-400">BCS Class:</span> <strong className="text-white font-mono">{selectedApiDetails.bcs_class}</strong></div>
+            <div className="flex space-x-1"><span className="text-slate-400">MW:</span> <strong className="text-white font-mono">{selectedApiDetails.molecular_weight} g/mol</strong></div>
+            <div className="flex space-x-1"><span className="text-slate-400">logP:</span> <strong className="text-white font-mono">{selectedApiDetails.logP}</strong></div>
+            <div className="flex space-x-1"><span className="text-slate-400">Particle Size (D50):</span> <strong className="text-white font-mono">{selectedApiDetails.particle_size_d50_um} µm</strong></div>
+            <div className="flex space-x-1"><span className="text-slate-400">Carr Index (Flow):</span> <strong className="text-white font-mono">{selectedApiDetails.carr_index}%</strong></div>
+            <div className="flex space-x-1"><span className="text-slate-400">Target Dose:</span> <strong className="text-white font-mono">{selectedApiDetails.dose_mg} mg</strong></div>
+          </div>
+        )}
       </div>
 
       {error && (

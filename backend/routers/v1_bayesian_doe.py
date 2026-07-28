@@ -344,7 +344,13 @@ def get_api_presets():
                     "mcc_min": mcc_min,
                     "mcc_max": mcc_max,
                     "target_diss": target_diss,
-                    "target_hardness": target_hardness
+                    "target_hardness": target_hardness,
+                    "bcs_class": bcs,
+                    "molecular_weight": round(clean_float(row_dict.get("molecular_weight"), 150.0), 1),
+                    "logP": round(clean_float(row_dict.get("logP"), 1.0), 2),
+                    "particle_size_d50_um": round(clean_float(row_dict.get("particle_size_d50_um"), 50.0), 1),
+                    "carr_index": round(carr, 1),
+                    "dose_mg": round(dose, 1)
                 }
             return presets
         except Exception as e:
