@@ -276,8 +276,81 @@ def get_session_summary(session_id: str = "default"):
 @router.get("/presets")
 def get_api_presets():
     """
-    Returns presets for common APIs to automatically populate characteristics.
+    Dynamically loads and computes presets for APIs from the Team Alpha database (CSV).
+    Falls back gracefully to static presets if the database file is unavailable.
     """
+    import os
+    import pandas as pd
+    
+    csv_path = "/home/harshit/vector_1_p/data/team_alpha_dummy.csv"
+    
+    # Check if the database exists and can be parsed
+    if os.path.exists(csv_path):
+        try:
+            df = pd.read_csv(csv_path)
+            # Remove duplicates to get unique API entries
+            df_unique = df.drop_duplicates(subset=["api_name"])
+            
+            presets = {}
+            import math
+            
+            def clean_float(val, fallback):
+                if val is None:
+                    return fallback
+                try:
+                    f_val = float(val)
+                    if math.isnan(f_val):
+                        return fallback
+                    return f_val
+                except (ValueError, TypeError):
+                    return fallback
+
+            for _, row in df_unique.iterrows():
+                row_dict = row.to_dict()
+                name = str(row_dict.get("api_name", "Unknown"))
+                
+                # Retrieve raw values safely
+                raw_decomp = row_dict.get("decomposition_onset_c")
+                raw_tg = row_dict.get("tg_predicted_celsius")
+                raw_carr = row_dict.get("flow_properties_carr_index")
+                raw_bcs = row_dict.get("bcs_class")
+                raw_dose = row_dict.get("dose_mg")
+                
+                # Parse values with robust null checks
+                decomp = clean_float(raw_decomp, 150.0)
+                tg = clean_float(raw_tg, max(30.0, min(80.0, decomp - 80.0)))
+                carr = clean_float(raw_carr, 25.0)
+                
+                # Flow property-based binder bounds (Carr Index)
+                if carr > 25.0:
+                    mcc_min, mcc_max = 20.0, 50.0
+                else:
+                    mcc_min, mcc_max = 10.0, 35.0
+                
+                # BCS class-dependent dissolution targets
+                bcs = str(raw_bcs) if raw_bcs is not None else "II"
+                # Handle possible NaN string/value
+                if bcs == "nan" or bcs == "":
+                    bcs = "II"
+                target_diss = 85.0 if bcs == "I" else 80.0
+                
+                # Dose-dependent tablet hardness targets
+                dose = clean_float(raw_dose, 100.0)
+                target_hardness = 9.0 if dose > 200.0 else 7.5
+                
+                presets[name] = {
+                    "tg": round(tg, 1),
+                    "decomp": round(decomp, 1),
+                    "mcc_min": mcc_min,
+                    "mcc_max": mcc_max,
+                    "target_diss": target_diss,
+                    "target_hardness": target_hardness
+                }
+            return presets
+        except Exception as e:
+            logger.error(f"Failed to parse dynamic presets database: {e}. Falling back to static presets.")
+            
+    # Resilient fallback preset dictionary
     return {
         "Aspirin-300": {
             "tg": 65.0,
