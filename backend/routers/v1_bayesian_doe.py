@@ -282,7 +282,10 @@ def get_api_presets():
     import os
     import pandas as pd
     
-    csv_path = "/home/harshit/vector_1_p/data/team_alpha_dummy.csv"
+    base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+    csv_path = os.path.join(base_dir, "data", "team_alpha_dummy.csv")
+    if not os.path.exists(csv_path):
+        csv_path = "/home/harshit/vector_1_p/data/team_alpha_dummy.csv"
     
     # Check if the database exists and can be parsed
     if os.path.exists(csv_path):

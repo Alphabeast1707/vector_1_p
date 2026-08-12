@@ -225,7 +225,7 @@ class ActiveLearningLoop:
                 Y_train = np.delete(Y[:, col_idx], i, axis=0)
                 X_test = X[i:i+1]
                 
-                model = GaussianProcessRegressor(kernel=Matern(nu=2.5), random_state=42)
+                model = GaussianProcessRegressor(kernel=Matern(nu=2.5), alpha=1e-2, random_state=42)
                 model.fit(X_train, Y_train)
                 mean, std = model.predict(X_test, return_std=True)
                 preds_mean.append(float(mean[0]))
@@ -310,7 +310,7 @@ class ActiveLearningLoop:
         
         predictions = {}
         for col_idx, name in enumerate(cqa_names):
-            gp = GaussianProcessRegressor(kernel=Matern(nu=2.5), random_state=42)
+            gp = GaussianProcessRegressor(kernel=Matern(nu=2.5), alpha=1e-2, random_state=42)
             gp.fit(X, Y[:, col_idx])
             mean, std = gp.predict(x.reshape(1, -1), return_std=True)
             mean_val = float(mean[0])
