@@ -1,0 +1,353 @@
+{
+  "workspace_resumption": {
+    "ports_and_services": {
+      "fastapi_backend": {
+        "port": 8001,
+        "pid": 398285,
+        "process_name": "uvicorn",
+        "http_status": 200,
+        "url": "http://localhost:8001/docs"
+      },
+      "vite_frontend": {
+        "port": 5173,
+        "pid": 1263520,
+        "process_name": "node",
+        "http_status": 200,
+        "url": "http://localhost:5173/"
+      }
+    },
+    "build_verification": {
+      "virtualenv_path": "/home/harshit/vector_1_p/backend/venv/bin/python",
+      "python_version": "Python 3.10.12",
+      "packages_checked": [
+        "torch",
+        "botorch",
+        "gpytorch",
+        "sklearn",
+        "pandas",
+        "numpy",
+        "scipy",
+        "fastapi"
+      ],
+      "pytest_suite": {
+        "status": "PASS",
+        "total_duration_sec": 18.21,
+        "results": [
+          {
+            "test_file": "tests/test_v1_bo.py",
+            "status": "PASS",
+            "duration_sec": 0.64
+          },
+          {
+            "test_file": "tests/test_v1_bo_botorch.py",
+            "status": "PASS",
+            "duration_sec": 3.11
+          },
+          {
+            "test_file": "tests/test_v1_phase1_integration.py",
+            "status": "PASS",
+            "duration_sec": 9.41
+          },
+          {
+            "test_file": "tests/test_v1_router.py",
+            "status": "PASS",
+            "duration_sec": 3.84
+          },
+          {
+            "test_file": "tests/test_weibull_fitting.py",
+            "status": "PASS",
+            "duration_sec": 0.72
+          },
+          {
+            "test_file": "tests/test_scaleup_physics.py",
+            "status": "PASS",
+            "duration_sec": 0.50
+          }
+        ]
+      }
+    },
+    "git_alignment": {
+      "branch": "scaleup_pr_clean",
+      "tracking_branch": "scaleup/scaleup_pr_clean",
+      "working_tree": "clean",
+      "head_commit": "9a2c8eb",
+      "head_commit_msg": "ci: add PYTHONPATH env variable to test job to resolve backend packages"
+    }
+  },
+  "codebase_outline": {
+    "layer_1_domain_builder": {
+      "file": "backend/engines/domain_builder.py",
+      "functions": [
+        {
+          "name": "build_domain",
+          "parameters": [
+            "profile: ProfileCard",
+            "strategy: StrategyCard"
+          ],
+          "returns": "Domain",
+          "description": "Constructs multi-objective search space bounds, calculating glass-transition-temperature-based drying boundaries and loading dynamic excipient and process CQA targets."
+        }
+      ]
+    },
+    "layer_2_mathematical_surrogates": {
+      "gp_modeling": {
+        "file": "backend/engines/gp_model.py",
+        "functions": [
+          {
+            "name": "create_gp_model",
+            "parameters": [
+              "train_X: torch.Tensor",
+              "train_Y: torch.Tensor"
+            ],
+            "returns": "SingleTaskGP",
+            "description": "Initializes a single-task Gaussian Process surrogate model using a Matern 5/2 covariance kernel and scale wrapper."
+          }
+        ]
+      },
+      "acquisition_optimization": {
+        "file": "backend/engines/acquisition.py",
+        "functions": [
+          {
+            "name": "create_ehvi_acquisition",
+            "parameters": [
+              "model: ModelListGP",
+              "ref_point: list[float]",
+              "train_Y: torch.Tensor"
+            ],
+            "returns": "ExpectedHypervolumeImprovement",
+            "description": "Initializes standard multi-objective EHVI acquisition based on deterministic hypervolume partitioning."
+          },
+          {
+            "name": "create_log_nehvi_acquisition",
+            "parameters": [
+              "model: ModelListGP",
+              "ref_point: list[float]",
+              "X_baseline: torch.Tensor"
+            ],
+            "returns": "qLogNoisyExpectedHypervolumeImprovement",
+            "description": "Initializes noise-robust qLogNEHVI acquisition. Implements O(2^M) exponential CPU scaling protection by limiting baseline reference points to the 4 most recent runs."
+          }
+        ]
+      }
+    },
+    "layer_3_active_learning_state_machine": {
+      "file": "backend/engines/bo_loop.py",
+      "classes": [
+        {
+          "name": "ActiveLearningLoop",
+          "methods": [
+            {
+              "name": "__init__",
+              "parameters": [
+                "domain",
+                "strategy",
+                "profile"
+              ],
+              "description": "Registers domain parameters, API profiles, and tracks running lists of formulation experiment history."
+            },
+            {
+              "name": "add_experiment_result",
+              "parameters": [
+                "x: list[float]",
+                "y: list[float]"
+              ],
+              "description": "Appends measured laboratory parameters and CQA responses to the loop's history database."
+            },
+            {
+              "name": "get_api_context_vector",
+              "parameters": [],
+              "returns": "list[float]",
+              "description": "Assembles a 6-dimensional physical/thermodynamic context vector representing melting point, density, Carr's index, TPSA, logP, and MW for the API."
+            },
+            {
+              "name": "_enforce_mass_balance",
+              "parameters": [
+                "suggestion: dict"
+              ],
+              "returns": "dict",
+              "description": "Implements formulation mass balances, checking dynamic excipients and scaling them proportionately relative to minimum limits if total percentage exceeds 70%."
+            },
+            {
+              "name": "_transform_objectives",
+              "parameters": [
+                "Y: np.ndarray"
+              ],
+              "returns": "np.ndarray",
+              "description": "Converts quality attributes to a pure maximization space. Keeps dissolution as-is, negates friability, and transforms hardness, CU, and Heckel compressibility to negative absolute target deviations."
+            },
+            {
+              "name": "evaluate_surrogate_calibration",
+              "parameters": [],
+              "returns": "dict",
+              "description": "Calculates probabilistic model health indicators (CRPS and 95% Confidence Interval Coverage) for fitted GPs."
+            },
+            {
+              "name": "compute_loo_cv_r2",
+              "parameters": [],
+              "returns": "dict",
+              "description": "Runs Leave-One-Out (LOO) cross-validation, computing localized R^2 scores for each of the 8 surrogate targets."
+            },
+            {
+              "name": "check_convergence",
+              "parameters": [
+                "tolerance: float",
+                "patience: int"
+              ],
+              "returns": "dict",
+              "description": "Evaluates Pareto front stability and convergence gradients over sequential iterations."
+            },
+            {
+              "name": "suggest_next",
+              "parameters": [],
+              "returns": "dict",
+              "description": "Core active selection engine. Generates spaced LHS seeds if N < 3. When N >= 3, standardizes inputs, fits 8 independent GPs, solves qLogNEHVI acquisition via SciPy L-BFGS-B, performs conservative posterior projections, and handles Scikit-Learn fallback."
+            }
+          ]
+        }
+      ],
+      "functions": [
+        {
+          "name": "compute_pareto_front",
+          "parameters": [
+            "Y: np.ndarray"
+          ],
+          "returns": "np.ndarray",
+          "description": "Computes non-dominated Pareto sets across multi-objective experiment outcomes."
+        }
+      ]
+    },
+    "layer_4_service_routers": {
+      "file": "backend/routers/v1_bayesian_doe.py",
+      "functions": [
+        {
+          "name": "_get_active_loop",
+          "parameters": [
+            "session_id: str",
+            "detail: str"
+          ],
+          "returns": "ActiveLearningLoop",
+          "description": "Loads the session's designated ActiveLearningLoop instance from in-memory registers."
+        },
+        {
+          "name": "initialize_domain",
+          "parameters": [
+            "profile: ProfileCard",
+            "strategy: StrategyCard",
+            "session_id: str"
+          ],
+          "description": "Endpoint [POST /v1/domain] to spin up a new active session and instantly output the first 3 LHS seeds."
+        },
+        {
+          "name": "add_result",
+          "parameters": [
+            "x_params: dict",
+            "y_results: dict",
+            "session_id: str"
+          ],
+          "description": "Endpoint [POST /v1/experiments/result] to submit physical laboratory outcomes back to the state machine."
+        },
+        {
+          "name": "suggest_next_experiment",
+          "parameters": [
+            "session_id: str"
+          ],
+          "description": "Endpoint [POST /v1/suggest] to execute Gaussian Process fitting and qLogNEHVI acquisition optimization, producing the next suggested batch."
+        },
+        {
+          "name": "get_experiment_history",
+          "parameters": [
+            "session_id: str"
+          ],
+          "description": "Endpoint [GET /v1/experiments/history] to fetch trial tables."
+        },
+        {
+          "name": "get_pareto_front",
+          "parameters": [
+            "session_id: str"
+          ],
+          "description": "Endpoint [GET /v1/pareto] to track multi-objective Pareto frontiers."
+        },
+        {
+          "name": "check_convergence_status",
+          "parameters": [
+            "session_id: str"
+          ],
+          "description": "Endpoint [GET /v1/convergence] to view convergence health."
+        },
+        {
+          "name": "get_session_summary",
+          "parameters": [
+            "session_id: str"
+          ],
+          "description": "Endpoint [GET /v1/summary] to gather all active learning loop metrics."
+        }
+      ]
+    },
+    "supporting_physics_and_chemistry": {
+      "weibull_dissolution": {
+        "file": "backend/engines/dissolution_weibull.py",
+        "functions": [
+          {
+            "name": "weibull_model",
+            "parameters": [
+              "t",
+              "eta",
+              "beta"
+            ],
+            "description": "Classic Weibull formulation mapping dissolution percentages over time."
+          },
+          {
+            "name": "fit_weibull_profile",
+            "parameters": [
+              "times: np.ndarray",
+              "dissolution: np.ndarray"
+            ],
+            "description": "Fits experimental dissolution timespans to output Weibull scale (eta) and shape (beta) parameters."
+          }
+        ]
+      },
+      "scaleup_mechanics": {
+        "file": "backend/engines/scaleup_physics.py",
+        "functions": [
+          {
+            "name": "compute_scaleup_metrics",
+            "parameters": [
+              "impeller_speed_rpm: float",
+              "impeller_diameter_m: float",
+              "scale_factor: float"
+            ],
+            "description": "Calculates shear rates, Reynolds, Froude, and power numbers to scale fluid dynamics across tank factors."
+          }
+        ]
+      },
+      "data_ingestion": {
+        "file": "backend/engines/data_ingestion.py",
+        "functions": [
+          {
+            "name": "ingest_alpha_dataset",
+            "parameters": [
+              "filepath: str"
+            ],
+            "returns": "ProfileCard",
+            "description": "Ingests historical datasets to construct molecular profiles."
+          },
+          {
+            "name": "ingest_beta_dataset",
+            "parameters": [
+              "filepath: str"
+            ],
+            "description": "Parses secondary formulation structures and excipient targets."
+          },
+          {
+            "name": "cross_validate_datasets",
+            "parameters": [
+              "alpha_profile: ProfileCard",
+              "beta_excipients: List[Excipient]"
+            ],
+            "description": "Validates consistency and parameter compatibility across input datasets."
+          }
+        ]
+      }
+    }
+  }
+}
